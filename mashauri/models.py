@@ -46,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         Kinde = "Kinde", "Kinde"
         Fireside = "Fireside", "Fireside"
         Soliton = "Soliton", "Soliton"
+        Sovereign = "Sovereign", "Sovereign"
 
     class FDP(models.TextChoices):
         No_fdp = "None", "None"
@@ -54,7 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         Optimax = "Optimax", "Optimax"
         BTN = "BTN", "BTN"
         Com21 = "Com21", "Com21"
-        Bens = "Bens", "Bens"
+        Fireside_Coast = "Fireside Coast", "Fireside Coast"
         Geonet = "Geonet", "Geonet"
 
     class RP(models.TextChoices):
@@ -131,6 +132,7 @@ class Dispatch(models.Model):
         ('Kinde', 'Kinde'),
         ('Fireside', 'Fireside'),
         ('Soliton', 'Soliton'),
+        ('Sovereign', 'Sovereign'),
     ]
 
     FDP_CHOICES = [
@@ -139,7 +141,7 @@ class Dispatch(models.Model):
         ('Optimax', 'Optimax'),
         ('BTN', 'BTN'),
         ('Com21', 'Com21'),
-        ('Bens', 'Bens'),
+        ('Fireside Coast', 'Fireside Coast'),
         ('Geonet', 'Geonet'),
     ]
 
@@ -154,6 +156,10 @@ class Dispatch(models.Model):
         ('Emmanuel Muteti', 'Emmanuel Muteti'),
         ('Paul Msava', 'Paul Msava'),
         ('Kevin Waswa', 'Kevin Waswa'),
+        ('John Wathinja', 'John Wathinja'),
+        ('Joel Obedi', 'Joel Obedi'),
+        ('Susan Terer', 'Susan Terer'),
+        ('Duncan Ndirangu', 'Duncan Ndirangu'),
     ]
 
     RP_CHOICES = [

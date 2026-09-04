@@ -188,7 +188,7 @@ def generate_pdf(
     logo_width = image_width * scale_factor
 
     # Header Image
-    logo_path = "https://mouseinc.net/wp-content/uploads/2024/07/logo.jpg"
+    logo_path = "https://starkhaven.xyz/mashauri.png"
     logo = Image(logo_path, width=logo_width, height=logo_height)
 
     # Content
@@ -485,7 +485,9 @@ def determine_email_recipients(msp, fdp, rp):
         'Soliton': [
             "noc@soliton.co.ke",
             "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke"]
+            "Tes-pms@safaricom.co.ke"],
+        'Sovereign': [
+            "Core_provisioning@sovereigncommunication.co.ke"]
     }
     fdp_emails = {
         'Fireside': ["fireside@safaricom.co.ke"],
@@ -493,7 +495,7 @@ def determine_email_recipients(msp, fdp, rp):
         'Optimax': ["optimax@safaricom.co.ke"],
         'BTN': ["btn@safaricom.co.ke", "noc@btn-solutions.co.ke"],
         'Com21': ["Com21@Safaricom.co.ke"],
-        'Bens': ["bens.safaricom.co.ke"],
+        'Fireside Coast': ["Firesidecoast@Safaricom.co.ke"],
         'Geonet': ["geonettechnologies@safaricom.co.ke"]
     }
 
@@ -503,7 +505,7 @@ def determine_email_recipients(msp, fdp, rp):
         'Fireside': ["linah@fireside.africa"],
         'Kinde': ["philip@kinde.co.ke"],
         'Camusat': ["cchenge@camusat.com, rkhamati@camusat.com"],
-        'Techminds': ["nkarambu@techminds.co.ke"],
+        'Techminds': ["nkarambu@techminds.co.ke", "fttx@techminds.co.ke"],
 
         'Egypro': ["Josephine_Kathure@egypro.com"],
         'Optimax': ["Mitchel.Ingato@optimaxgroup.co.ke"],
@@ -834,14 +836,20 @@ def send_escalation_email(start_time, end_time, subject, recipients):
 def email_recipients_report():
     return [
         'Com21@Safaricom.co.ke',
-        'Tes-pms@safaricom.co.ke', 'bens.safaricom.co.ke',
+        'Tes-pms@safaricom.co.ke',
         'broadcom@safaricom.co.ke',
         'enterpriseconnectivity@safaricom.co.ke',
         'fnmc@egypro.com', 'Fnmc_provisioning@egypro.com',
         'noc@btn-solutions.co.ke',
         'noc@fireside.africa', 'noc@kinde.co.ke', 'noc@soliton.co.ke',
         'noc.kenya@camusat.com',
-        'nmc-fiber@adriankenya.com', 'optimax@safaricom.co.ke']
+        'nmc-fiber@adriankenya.com', 'optimax@safaricom.co.ke',
+        'jWathinja@Safaricom.co.ke',
+        'JKONGO1@Safaricom.co.ke',
+        'EMuteti@Safaricom.co.ke',
+        'DNdirangu@Safaricom.co.ke',
+        'KWASWA@Safaricom.co.ke',
+        'TChepkorir@Safaricom.co.ke']
 
 
 # 9 AM Escalation Email
