@@ -47,6 +47,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         Fireside = "Fireside", "Fireside"
         Soliton = "Soliton", "Soliton"
         Sovereign = "Sovereign", "Sovereign"
+        Optimax = "Optimax", "Optimax"
+        Tetranet = "Tetranet", "Tetranet"
+        Corevantage = "Corevantage", "Corevantage"
 
     class FDP(models.TextChoices):
         No_fdp = "None", "None"
@@ -133,6 +136,9 @@ class Dispatch(models.Model):
         ('Fireside', 'Fireside'),
         ('Soliton', 'Soliton'),
         ('Sovereign', 'Sovereign'),
+        ('Optimax', 'Optimax'),
+        ('Tetranet', 'Tetranet'),
+        ('Corevantage', 'Corevantage'),
     ]
 
     FDP_CHOICES = [

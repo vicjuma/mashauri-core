@@ -188,7 +188,7 @@ def generate_pdf(
     logo_width = image_width * scale_factor
 
     # Header Image
-    logo_path = "https://starkhaven.xyz/mashauri.png"
+    logo_path = "https://assets.mouseinc.co.ke/mashauri.png"
     logo = Image(logo_path, width=logo_width, height=logo_height)
 
     # Content
@@ -487,7 +487,23 @@ def determine_email_recipients(msp, fdp, rp):
             "enterpriseconnectivity@safaricom.co.ke",
             "Tes-pms@safaricom.co.ke"],
         'Sovereign': [
-            "Core_provisioning@sovereigncommunication.co.ke"]
+            "Core_provisioning@sovereigncommunication.co.ke",
+            "enterpriseconnectivity@safaricom.co.ke",
+            "Tes-pms@safaricom.co.ke"],
+        'Optimax': [
+            "noc@optimaxgroup.co.ke",
+            "enterpriseconnectivity@safaricom.co.ke",
+            "Tes-pms@safaricom.co.ke"],
+        'Tetranet': [
+            "tetranetfiberteam@tetranet.co.ke",
+            "enterpriseconnectivity@safaricom.co.ke",
+            "Tes-pms@safaricom.co.ke"],
+        'Corevantage': [
+            "fiber.noc@corevantage.co.ke",
+            "clare.gitonga@corevantage.co.ke",
+            "george.orina@corevantage.co.ke",
+            "enterpriseconnectivity@safaricom.co.ke",
+            "Tes-pms@safaricom.co.ke"],
     }
     fdp_emails = {
         'Fireside': ["fireside@safaricom.co.ke"],
@@ -840,16 +856,19 @@ def email_recipients_report():
         'broadcom@safaricom.co.ke',
         'enterpriseconnectivity@safaricom.co.ke',
         'fnmc@egypro.com', 'Fnmc_provisioning@egypro.com',
-        'noc@btn-solutions.co.ke',
+        'noc@btn-solutions.co.ke', "tetranetfiberteam@tetranet.co.ke",
         'noc@fireside.africa', 'noc@kinde.co.ke', 'noc@soliton.co.ke',
-        'noc.kenya@camusat.com',
+        'noc.kenya@camusat.com', "noc@optimaxgroup.co.ke",
         'nmc-fiber@adriankenya.com', 'optimax@safaricom.co.ke',
         'jWathinja@Safaricom.co.ke',
         'JKONGO1@Safaricom.co.ke',
         'EMuteti@Safaricom.co.ke',
         'DNdirangu@Safaricom.co.ke',
         'KWASWA@Safaricom.co.ke',
-        'TChepkorir@Safaricom.co.ke']
+        'TChepkorir@Safaricom.co.ke',
+        "fiber.noc@corevantage.co.ke",
+        "clare.gitonga@corevantage.co.ke",
+        "george.orina@corevantage.co.ke"]
 
 
 # 9 AM Escalation Email
