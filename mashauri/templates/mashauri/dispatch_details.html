@@ -225,7 +225,16 @@ tr:nth-child(even) {
                               <option value="{{ value }}">{{ label }}</option>
                             {% endif %}
                           {% endfor %}
+                        </optgroup>
+
+                      <optgroup label="rollout partner">
+                          {% for value, label in rp_choices %}
+                              <option value="{{ value|default:'' }}" {% if value == dispatch.rp %}selected{% endif %}>
+                                  {{ label|default:"None" }}
+                              </option>
+                          {% endfor %}
                       </optgroup>
+
                         <optgroup label="Escalate Upwards">
                           {% if dispatch.reassign_to != "ENTERPRISE CONNECTIVITY" %}
                           <option value="ENTERPRISE CONNECTIVITY">ENTERPRISE CONNECTIVITY</option>

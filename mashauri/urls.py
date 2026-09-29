@@ -16,6 +16,10 @@ urlpatterns = [
     path(
         'dashboard/dispatch-details/<int:pk>/',
         views.dispatch_detail, name='dispatch_detail'),
+    path(
+        'dashboard/rp-dispatch-details/<int:pk>/',
+        views.rp_dispatch_detail,
+        name='rp_dispatch_detail'),
     path('presentation/', views.plots_visualization, name='presentation'),
     path('logout/', views.logout_user, name='logout'),
     path(

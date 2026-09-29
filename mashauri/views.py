@@ -6,7 +6,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import User, Dispatch, Comment
+from .models import User, Dispatch, Comment, DispatchStageHistory
 from datetime import timedelta
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
@@ -18,6 +18,8 @@ from .utils import build_context, extract_dispatch_data, \
     build_escalation_url, determine_email_recipients, \
     send_notification_email, handle_comment_update, \
     handle_dispatch_closing, handle_dispatch_reassignment
+from django.db import transaction
+from django.contrib import messages
 
 
 def unauthenticated_user(view_func):
@@ -238,10 +240,189 @@ def dispatch_detail(request, pk):
         'is_ec': current_user.role == 'ENTERPRISE CONNECTIVITY',
         'comments': comments,
         'msp_choices': Dispatch.MSP_CHOICES,
+        'rp_choices': Dispatch.RP_CHOICES,
         'user': current_user,
         'image': filtered_image,
         'is_img_pdf': is_img_pdf,
     })
+
+@login_required
+@csrf_exempt
+def rp_dispatch_detail(request, pk):
+    dispatch = get_object_or_404(Dispatch, pk=pk)
+    current_user = request.user
+
+    stages = [
+        'Survey',
+        'Design',
+        'Design approval',
+        'Commercial approval',
+        'Po issuance',
+        'Materials',
+        'Deployment',
+        'Interception',
+    ]
+
+    current_stage = dispatch.stage
+
+    # ---------------------------------------------------------
+    # POST - MOVE TO NEXT STAGE
+    # ---------------------------------------------------------
+    if request.method == "POST":
+
+        action = request.POST.get("action")
+
+        if action == "move_next":
+
+            comment = request.POST.get("comment", "").strip()
+
+            # -------------------------------------------------
+            # Comment is mandatory
+            # -------------------------------------------------
+            if not comment:
+                messages.error(
+                    request,
+                    "Please provide a comment before moving the dispatch."
+                )
+
+                return redirect(
+                    'rp_dispatch_detail',
+                    pk=dispatch.pk
+                )
+
+            # -------------------------------------------------
+            # Make sure current stage is valid
+            # -------------------------------------------------
+            if current_stage not in stages:
+                messages.error(
+                    request,
+                    "The current dispatch stage is invalid."
+                )
+
+                return redirect(
+                    'rp_dispatch_detail',
+                    pk=dispatch.pk
+                )
+
+            current_index = stages.index(current_stage)
+
+            # -------------------------------------------------
+            # Check if already at final stage
+            # -------------------------------------------------
+            if current_index >= len(stages) - 1:
+                messages.warning(
+                    request,
+                    "This dispatch is already at the final stage."
+                )
+
+                return redirect(
+                    'rp_dispatch_detail',
+                    pk=dispatch.pk
+                )
+
+            next_stage = stages[current_index + 1]
+
+            # -------------------------------------------------
+            # Save stage + history together
+            # -------------------------------------------------
+            with transaction.atomic():
+
+                # Update current dispatch stage
+                dispatch.stage = next_stage
+                dispatch.save(update_fields=["stage", "updated_at"])
+
+                # Create permanent movement history
+                DispatchStageHistory.objects.create(
+                    dispatch=dispatch,
+                    from_stage=current_stage,
+                    to_stage=next_stage,
+                    comment=comment,
+                    moved_by=current_user,
+                )
+
+            messages.success(
+                request,
+                f"Dispatch moved from {current_stage} to {next_stage}."
+            )
+
+            return redirect(
+                'rp_dispatch_detail',
+                pk=dispatch.pk
+            )
+
+    # ---------------------------------------------------------
+    # CURRENT STAGE INFORMATION
+    # ---------------------------------------------------------
+
+    if current_stage in stages:
+
+        current_stage_index = stages.index(current_stage)
+
+        if current_stage_index < len(stages) - 1:
+            next_stage = stages[current_stage_index + 1]
+        else:
+            next_stage = None
+
+    else:
+        current_stage_index = None
+        next_stage = None
+
+    # ---------------------------------------------------------
+    # STAGE HISTORY
+    # ---------------------------------------------------------
+
+    stage_history = dispatch.stage_history.select_related(
+        'moved_by'
+    ).order_by('-created_at')
+
+    # ---------------------------------------------------------
+    # EXISTING DATA
+    # ---------------------------------------------------------
+
+    full_url = request.build_absolute_uri(
+        reverse('dispatch_detail', kwargs={'pk': pk})
+    )
+
+    email_recipients = determine_email_recipients(
+        dispatch.msp,
+        dispatch.fdp,
+        dispatch.rp
+    )
+
+    context = {
+        'dispatch': dispatch,
+        'user': current_user,
+
+        # Workflow
+        'stages': stages,
+        'current_stage': current_stage,
+        'current_stage_index': current_stage_index,
+        'next_stage': next_stage,
+
+        # Stage history
+        'stage_history': stage_history,
+
+        # Special states
+        'is_on_hold': current_stage == 'On hold',
+        'is_dropped': current_stage == 'Dropped',
+
+        # Useful UI flag
+        'can_move_next': (
+            current_stage in stages
+            and current_stage_index is not None
+            and current_stage_index < len(stages) - 1
+        ),
+
+        # Existing data
+        'full_url': full_url,
+        'email_recipients': email_recipients,
+    }
+
+    return render(
+        request,
+        'mashauri/rp_dispatch_details.html',
+        context
+    )
 
 
 def plots_visualization(request):

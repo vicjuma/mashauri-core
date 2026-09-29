@@ -28,7 +28,7 @@ from django.core.files.base import ContentFile
 from django.contrib import messages
 from django.shortcuts import render
 from reportlab.lib.pagesizes import letter, landscape
-
+from emails.models import RecipientCategory, RecipientEmail
 
 # Modify the role decorator to redirect to the appropriate dashboard
 def role_required(required_role, redirect_url_name):
@@ -459,85 +459,105 @@ def build_escalation_url(request, dispatch_id):
     return request.build_absolute_uri(escalation_url)
 
 
+# def determine_email_recipients(msp, fdp, rp):
+#     """Determine the email recipients based on MSP, FDP, and user role."""
+#     msp_emails = {
+#         'Egypro': [
+#             "fnmc@egypro.com",
+#             "enterpriseconnectivity@safaricom.co.ke",
+#             "Tes-pms@safaricom.co.ke", "Fnmc_provisioning@egypro.com"],
+#         'Camusat': [
+#             "noc.kenya@camusat.com",
+#             "enterpriseconnectivity@safaricom.co.ke",
+#             "Tes-pms@safaricom.co.ke"],
+#         'Adrian': [
+#             "nmc-fiber@adriankenya.com",
+#             "enterpriseconnectivity@safaricom.co.ke",
+#             "Tes-pms@safaricom.co.ke"],
+#         'Kinde': [
+#             "noc@kinde.co.ke",
+#             "enterpriseconnectivity@safaricom.co.ke",
+#             "Tes-pms@safaricom.co.ke"],
+#         'Fireside': [
+#             "noc@fireside.africa",
+#             "enterpriseconnectivity@safaricom.co.ke",
+#             "Tes-pms@safaricom.co.ke"],
+#         'Soliton': [
+#             "noc@soliton.co.ke",
+#             "enterpriseconnectivity@safaricom.co.ke",
+#             "Tes-pms@safaricom.co.ke"],
+#         'Sovereign': [
+#             "Core_provisioning@sovereigncommunication.co.ke",
+#             "enterpriseconnectivity@safaricom.co.ke",
+#             "Tes-pms@safaricom.co.ke"],
+#         'Optimax': [
+#             "noc@optimaxgroup.co.ke",
+#             "enterpriseconnectivity@safaricom.co.ke",
+#             "Tes-pms@safaricom.co.ke"],
+#         'Tetranet': [
+#             "tetranetfiberteam@tetranet.co.ke",
+#             "enterpriseconnectivity@safaricom.co.ke",
+#             "Tes-pms@safaricom.co.ke"],
+#         'Corevantage': [
+#             "fiber.noc@corevantage.co.ke",
+#             "clare.gitonga@corevantage.co.ke",
+#             "george.orina@corevantage.co.ke",
+#             "enterpriseconnectivity@safaricom.co.ke",
+#             "Tes-pms@safaricom.co.ke"],
+#     }
+#     fdp_emails = {
+#         'Fireside': ["fireside@safaricom.co.ke"],
+#         'Broadcom': ["broadcom@safaricom.co.ke"],
+#         'Optimax': ["optimax@safaricom.co.ke"],
+#         'BTN': ["btn@safaricom.co.ke", "noc@btn-solutions.co.ke"],
+#         'Com21': ["Com21@Safaricom.co.ke"],
+#         'Fireside Coast': ["Firesidecoast@Safaricom.co.ke"],
+#         'Geonet': ["geonettechnologies@safaricom.co.ke"]
+#     }
+
+#     rp_emails = {
+#         'Powergen': ["pmwangi@powergentechnologies.co.ke"],
+#         'Hatikvah': ["valary@hatikvah.co.ke"],
+#         'Fireside': ["linah@fireside.africa"],
+#         'Kinde': ["philip@kinde.co.ke"],
+#         'Camusat': ["cchenge@camusat.com", "rkhamati@camusat.com"],
+#         'Techminds': ["nkarambu@techminds.co.ke", "fttx@techminds.co.ke"],
+
+#         'Egypro': ["Josephine_Kathure@egypro.com"],
+#         'Optimax': ["Mitchel.Ingato@optimaxgroup.co.ke"],
+#         'Pavicon': ["philip.omoiti@pavicon.co.ke"],
+
+#         'Adrian': ["Winnie.kamweti@adriankenya.com"],
+#         'Tetranet': ["joe.warutere@tetranet.co.ke"],
+#         'Acl': ["jane@aclkenya.co.ke"],
+#         'Quavatel': ["Florence.njoki@quavatel.com"],
+#     }
+
+#     recipients = msp_emails.get(msp, [])
+#     if fdp in fdp_emails:
+#         recipients += fdp_emails[fdp]
+#     if rp in rp_emails:
+#         recipients += rp_emails[rp]
+#     return recipients
+
 def determine_email_recipients(msp, fdp, rp):
     """Determine the email recipients based on MSP, FDP, and user role."""
-    msp_emails = {
-        'Egypro': [
-            "fnmc@egypro.com",
-            "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke", "Fnmc_provisioning@egypro.com"],
-        'Camusat': [
-            "noc.kenya@camusat.com",
-            "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke"],
-        'Adrian': [
-            "nmc-fiber@adriankenya.com",
-            "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke"],
-        'Kinde': [
-            "noc@kinde.co.ke",
-            "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke"],
-        'Fireside': [
-            "noc@fireside.africa",
-            "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke"],
-        'Soliton': [
-            "noc@soliton.co.ke",
-            "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke"],
-        'Sovereign': [
-            "Core_provisioning@sovereigncommunication.co.ke",
-            "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke"],
-        'Optimax': [
-            "noc@optimaxgroup.co.ke",
-            "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke"],
-        'Tetranet': [
-            "tetranetfiberteam@tetranet.co.ke",
-            "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke"],
-        'Corevantage': [
-            "fiber.noc@corevantage.co.ke",
-            "clare.gitonga@corevantage.co.ke",
-            "george.orina@corevantage.co.ke",
-            "enterpriseconnectivity@safaricom.co.ke",
-            "Tes-pms@safaricom.co.ke"],
-    }
-    fdp_emails = {
-        'Fireside': ["fireside@safaricom.co.ke"],
-        'Broadcom': ["broadcom@safaricom.co.ke"],
-        'Optimax': ["optimax@safaricom.co.ke"],
-        'BTN': ["btn@safaricom.co.ke", "noc@btn-solutions.co.ke"],
-        'Com21': ["Com21@Safaricom.co.ke"],
-        'Fireside Coast': ["Firesidecoast@Safaricom.co.ke"],
-        'Geonet': ["geonettechnologies@safaricom.co.ke"]
-    }
+    recipients = []
+    lookups = [
+        (RecipientCategory.MSP, msp),
+        (RecipientCategory.FDP, fdp),
+        (RecipientCategory.RP, rp),
+    ]
+    for category, name in lookups:
+        if not name:
+            continue
+        recipients += RecipientEmail.objects.filter(
+            group__category=category,
+            group__name=name,
+            group__is_active=True,
+            is_active=True,
+        ).values_list("email", flat=True)
 
-    rp_emails = {
-        'Powergen': ["pmwangi@powergentechnologies.co.ke"],
-        'Hatikvah': ["valary@hatikvah.co.ke"],
-        'Fireside': ["linah@fireside.africa"],
-        'Kinde': ["philip@kinde.co.ke"],
-        'Camusat': ["cchenge@camusat.com, rkhamati@camusat.com"],
-        'Techminds': ["nkarambu@techminds.co.ke", "fttx@techminds.co.ke"],
-
-        'Egypro': ["Josephine_Kathure@egypro.com"],
-        'Optimax': ["Mitchel.Ingato@optimaxgroup.co.ke"],
-        'Pavicon': ["philip.omoiti@pavicon.co.ke"],
-
-        'Adrian': ["Winnie.kamweti@adriankenya.com"],
-        'Tetranet': ["joe.warutere@tetranet.co.ke"],
-        'Acl': ["jane@aclkenya.co.ke"],
-        'Quavatel': ["Florence.njoki@quavatel.com"],
-    }
-
-    recipients = msp_emails.get(msp, [])
-    if fdp in fdp_emails:
-        recipients += fdp_emails[fdp]
-    if rp in rp_emails:
-        recipients += rp_emails[rp]
     return recipients
 
 
@@ -686,11 +706,23 @@ def handle_dispatch_closing(request, dispatch, email_recipients, full_url):
 def handle_dispatch_reassignment(
         request, dispatch, email_recipients, full_url):
     selected_value = request.POST.get('assignment')
-    if selected_value != 'ENTERPRISE CONNECTIVITY':
+
+    msp_values = [value for value, label in Dispatch.MSP_CHOICES]
+    rp_values = [value for value, label in Dispatch.RP_CHOICES]
+
+    if selected_value in msp_values:
         dispatch.msp = selected_value
-    else:
+        dispatch.rp = None
+        dispatch.reassign_to = selected_value
+    elif selected_value in rp_values:
         dispatch.msp = None
-    dispatch.reassign_to = selected_value
+        dispatch.rp = selected_value
+        dispatch.reassign_to = selected_value
+    elif selected_value == 'ENTERPRISE CONNECTIVITY':
+        dispatch.msp = None
+        dispatch.rp = None
+        dispatch.reassign_to = selected_value
+        dispatch.sla_timer = now() + timedelta(days=10)
     dispatch.save()
 
     subject, message = prepare_email_details(
@@ -849,26 +881,46 @@ def send_escalation_email(start_time, end_time, subject, recipients):
     print(f"Email sent for {subject} covering {start_time} to {end_time}.")
 
 
+# def email_recipients_report():
+#     return [
+#         'Com21@Safaricom.co.ke',
+#         'Tes-pms@safaricom.co.ke',
+#         'broadcom@safaricom.co.ke',
+#         'enterpriseconnectivity@safaricom.co.ke',
+#         'fnmc@egypro.com', 'Fnmc_provisioning@egypro.com',
+#         'noc@btn-solutions.co.ke', "tetranetfiberteam@tetranet.co.ke",
+#         'noc@fireside.africa', 'noc@kinde.co.ke', 'noc@soliton.co.ke',
+#         'noc.kenya@camusat.com', "noc@optimaxgroup.co.ke",
+#         'nmc-fiber@adriankenya.com', 'optimax@safaricom.co.ke',
+#         'jWathinja@Safaricom.co.ke',
+#         'JKONGO1@Safaricom.co.ke',
+#         'EMuteti@Safaricom.co.ke',
+#         'DNdirangu@Safaricom.co.ke',
+#         'KWASWA@Safaricom.co.ke',
+#         'TChepkorir@Safaricom.co.ke',
+#         "fiber.noc@corevantage.co.ke",
+#         "clare.gitonga@corevantage.co.ke",
+#         "george.orina@corevantage.co.ke"]
+
 def email_recipients_report():
-    return [
-        'Com21@Safaricom.co.ke',
-        'Tes-pms@safaricom.co.ke',
-        'broadcom@safaricom.co.ke',
-        'enterpriseconnectivity@safaricom.co.ke',
-        'fnmc@egypro.com', 'Fnmc_provisioning@egypro.com',
-        'noc@btn-solutions.co.ke', "tetranetfiberteam@tetranet.co.ke",
-        'noc@fireside.africa', 'noc@kinde.co.ke', 'noc@soliton.co.ke',
-        'noc.kenya@camusat.com', "noc@optimaxgroup.co.ke",
-        'nmc-fiber@adriankenya.com', 'optimax@safaricom.co.ke',
-        'jWathinja@Safaricom.co.ke',
-        'JKONGO1@Safaricom.co.ke',
-        'EMuteti@Safaricom.co.ke',
-        'DNdirangu@Safaricom.co.ke',
-        'KWASWA@Safaricom.co.ke',
-        'TChepkorir@Safaricom.co.ke',
-        "fiber.noc@corevantage.co.ke",
-        "clare.gitonga@corevantage.co.ke",
-        "george.orina@corevantage.co.ke"]
+    return list(
+        RecipientEmail.objects.filter(
+            group__category=RecipientCategory.REPORT,
+            group__name="Report",
+            group__is_active=True,
+            is_active=True,
+        ).values_list("email", flat=True)
+    )
+
+def email_recipients_escalation_matrix():
+    return list(
+        RecipientEmail.objects.filter(
+            group__category=RecipientCategory.ESCALATION_MATRIX,
+            group__name="Escalation Matrix",
+            group__is_active=True,
+            is_active=True,
+        ).values_list("email", flat=True)
+    )
 
 
 # 9 AM Escalation Email

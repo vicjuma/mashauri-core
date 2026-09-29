@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Dispatch, Ticket, SLA, Comment
+from .models import User, Dispatch, Ticket, SLA, Comment, DispatchStageHistory
 from django.contrib.auth.models import Group
 from django import forms
 from django.core.exceptions import ValidationError
@@ -109,9 +109,55 @@ class SLAAdmin(admin.ModelAdmin):
         }),
     )
 
+class DispatchStageHistoryAdmin(admin.ModelAdmin):
+    list_display = (
+        'dispatch',
+        'from_stage',
+        'to_stage',
+        'comment',
+        'moved_by',
+        'created_at',
+    )
+
+    list_filter = (
+        'from_stage',
+        'to_stage',
+        'created_at',
+    )
+
+    search_fields = (
+        'dispatch__building_name',
+        'dispatch__building_id',
+        'comment',
+        'moved_by__email',
+        'moved_by__first_name',
+        'moved_by__last_name',
+    )
+
+    readonly_fields = (
+        'created_at',
+    )
+
+    fieldsets = (
+        ('Stage Movement', {
+            'fields': (
+                'dispatch',
+                'from_stage',
+                'to_stage',
+                'comment',
+                'moved_by',
+            ),
+        }),
+        ('Timestamp', {
+            'fields': (
+                'created_at',
+            ),
+        }),
+    )
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Dispatch, DispatchAdmin)
 admin.site.register(Ticket, TicketAdmin)
 admin.site.register(SLA, SLAAdmin)
 admin.site.register(Comment)
+admin.site.register(DispatchStageHistory, DispatchStageHistoryAdmin)

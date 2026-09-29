@@ -125,6 +125,7 @@ class Dispatch(models.Model):
         ('Interception', 'Interception'),
         ('Support', 'Support'),
         ('Optimization', 'Optimization'),
+        ('OTB', 'OTB'),
     ]
 
     MSP_CHOICES = [
@@ -187,6 +188,19 @@ class Dispatch(models.Model):
         ('Acl', 'Acl'),
     ]
 
+    STAGE_CHOICES = [
+        ('Survey', 'Survey'),
+        ('Design', 'Design'),
+        ('Design approval', 'Design approval'),
+        ('Commercial approval', 'Commercial approval'),
+        ('Po issuance', 'Po issuance'),
+        ('Materials', 'Materials'),
+        ('Deployment', 'Deployment'),
+        ('Interception', 'Interception'),
+        ('On hold', 'On hold'),
+        ('Dropped', 'Dropped'),
+    ]
+
     building_name = models.CharField(max_length=50)
     building_id = models.CharField(max_length=50, null=True, blank=True)
     msp = models.CharField(
@@ -225,6 +239,28 @@ class Dispatch(models.Model):
         max_length=50, null=True,
         default=None, blank=True)
     closed_at = models.DateTimeField(null=True, blank=True)
+    stage = models.CharField(
+    max_length=50,
+    choices=STAGE_CHOICES,
+    default='Survey',
+)
+    pm_sla_email_sent_normal = models.BooleanField(default=False)
+    coo_sla_email_sent_normal = models.BooleanField(default=False)
+    cto_sla_email_sent_normal = models.BooleanField(default=False)
+    ceo_sla_email_sent_normal = models.BooleanField(default=False)
+    hod_sla_email_sent_normal = models.BooleanField(default=False)
+
+    pm_sla_email_sent_optimization = models.BooleanField(default=False)
+    coo_sla_email_sent_optimization = models.BooleanField(default=False)
+    cto_sla_email_sent_optimization = models.BooleanField(default=False)
+    ceo_sla_email_sent_optimization = models.BooleanField(default=False)
+    hod_sla_email_sent_optimization = models.BooleanField(default=False)
+
+    pm_sla_email_sent_otb = models.BooleanField(default=False)
+    coo_sla_email_sent_otb = models.BooleanField(default=False)
+    cto_sla_email_sent_otb = models.BooleanField(default=False)
+    ceo_sla_email_sent_otb = models.BooleanField(default=False)
+    hod_sla_email_sent_otb = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.id} - {self.building_name}'
@@ -233,6 +269,10 @@ class Dispatch(models.Model):
         if not self.id:
             if self.escalation_type == 'Proactive':
                 self.sla_timer = timezone.now() + timedelta(hours=120)
+            elif self.escalation_type == 'OTB':
+                 self.sla_timer = timezone.now() + timedelta(hours=1512)
+            elif self.escalation_type == 'Optimization':
+                self.sla_timer = timezone.now() + timedelta(hours=720)
             elif (
                     (self.escalation_type == 'Reactive') or (
                             self.escalation_type == 'Interception')):
@@ -314,3 +354,24 @@ class Comment(models.Model):
         db_table = 'mashauri_dispatch_comments'
         verbose_name = 'Dispatch Comment'
         verbose_name_plural = 'Dispatch Comments'
+
+class DispatchStageHistory(models.Model):
+    dispatch = models.ForeignKey(
+        Dispatch,
+        on_delete=models.CASCADE,
+        related_name='stage_history'
+    )
+
+    from_stage = models.CharField(max_length=50)
+    to_stage = models.CharField(max_length=50)
+
+    comment = models.TextField()
+
+    moved_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
