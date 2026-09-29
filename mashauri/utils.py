@@ -385,7 +385,13 @@ def build_context(user, category_field, category_value, request):
         'closed_dispatches_json': closed_dispatches_json,
         'closed_dispatches_count': closed_dispatches_count,
         'MEDIA_URL': settings.MEDIA_URL,
-        'searched': searched
+        'searched': searched,
+        'dispatch_choices': {
+            'escalation_type': Dispatch._meta.get_field('escalation_type').choices,
+            'msp': Dispatch._meta.get_field('msp').choices,
+            'fdp': Dispatch._meta.get_field('fdp').choices,
+            'rp': Dispatch._meta.get_field('rp').choices,
+        },
     }
     return data
 

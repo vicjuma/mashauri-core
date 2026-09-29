@@ -146,51 +146,58 @@
                     <tr>
                         <td></td>
                         <td colspan="2">Sort BY:</td>
-                        <td><div class="center-element">
+                        <td>
+                          <div class="center-element">
+                            <label for="escalation_type"><small>Escalation Type</small></label>
                             <span class="custom-select">
                               <select id="escalation_type">
-                                <option selected>All</option>
-                                <option>Proactive</option>
-                                <option>Reactive</option>
-                                <option>Interception</option>
-                                <option>Support</option>
-                                <option>Optimization</option>
-                                <option>OTB</option>
+                                  <option value="" selected>All</option>
+                                  {% for value, label in dispatch_choices.escalation_type %}
+                                      <option value="{{ value }}">{{ label }}</option>
+                                  {% endfor %}
                               </select>
                             </span>
-                          </div></td>
-                        <td><div class="center-element">
+                          </div>
+                        </td>
+                        <td>
+                          <div class="center-element">
+                             <label for="escalation_type"><small>MSP</small></label>
                             <span class="custom-select">
                               <select id="msp">
-                                <option selected>All</option>
-                                <option>Egypro</option>
-                                <option>Camusat</option>
-                                <option>Adrian</option>
-                                <option>Kinde</option>
-                                <option>Fireside</option>
-                                <option>Soliton</option>
-                                <option>Sovereign</option>
-                                <option>Optimax</option>
-                                <option>Tetranet</option>
-                                <option>Corevantage</option>
+                                  <option value="" selected>All</option>
+                                  {% for value, label in dispatch_choices.msp %}
+                                      <option value="{{ value }}">{{ label }}</option>
+                                  {% endfor %}
                               </select>
                             </span>
-                          </div></td>
-                        <td><div class="center-element">
+                          </div>
+                        </td>
+                        <td>
+                          <div class="center-element">
+                             <label for="escalation_type"><small>FDP</small></label>
                             <span class="custom-select">
-                              <select id="fdp">
-                                <option selected>All</option>
-                                <option>Fireside</option>
-                                <option>Broadcom</option>
-                                <option>Optimax</option>
-                                <option>BTN</option>
-                                <option>Com21</option>
-                                <option>Fireside Coast</option>
-                                <option>Geonet</option>
-                              </select>
+                             <select id="fdp">
+                                <option value="" selected>All</option>
+                                {% for value, label in dispatch_choices.fdp %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
                             </span>
-                          </div></td>
-                        <td></td>
+                          </div>
+                        </td>
+                         <td>
+                          <div class="center-element">
+                             <label for="escalation_type"><small>RP</small></label>
+                            <span class="custom-select">
+                             <select id="rp">
+                                <option value="" selected>All</option>
+                                {% for value, label in dispatch_choices.rp %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            </span>
+                          </div>
+                        </td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -304,7 +311,7 @@
 {% block extra_scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
-  document.querySelectorAll('#escalation_type, #msp, #fdp').forEach(select => {
+document.querySelectorAll('#escalation_type, #msp, #fdp, #rp').forEach(select => {
     select.addEventListener('change', filterTable);
 });
 
@@ -312,19 +319,46 @@ function filterTable() {
     let escalationType = document.getElementById('escalation_type').value.trim();
     let msp = document.getElementById('msp').value.trim();
     let fdp = document.getElementById('fdp').value.trim();
+    let rp = document.getElementById('rp').value.trim();
 
     let rows = document.querySelectorAll('#data-table tbody tr');
 
     rows.forEach(row => {
-        let rowEscalationType = row.querySelector('.escalation-type')?.textContent.trim() || '';
-        let rowMsp = row.querySelector('.msp')?.textContent.trim() || '';
-        let rowFdp = row.querySelector('.fdp')?.textContent.trim() || '';
+        let rowEscalationType =
+            row.querySelector('.escalation-type')?.textContent.trim() || '';
 
-        let escalationTypeMatch = (escalationType === 'All' || rowEscalationType.toLowerCase() === escalationType.toLowerCase());
-        let mspMatch = (msp === 'All' || rowMsp.toLowerCase() === msp.toLowerCase());
-        let fdpMatch = (fdp === 'All' || rowFdp.toLowerCase() === fdp.toLowerCase());
+        let rowMsp =
+            row.querySelector('.msp')?.textContent.trim() || '';
 
-        if (escalationTypeMatch && mspMatch && fdpMatch && row.getAttribute('data-status') !== 'Closed') {
+        let rowFdp =
+            row.querySelector('.fdp')?.textContent.trim() || '';
+
+        let rowRp =
+            row.querySelector('.rp')?.textContent.trim() || '';
+
+        let escalationTypeMatch =
+            (escalationType === '' ||
+             rowEscalationType.toLowerCase() === escalationType.toLowerCase());
+
+        let mspMatch =
+            (msp === '' ||
+             rowMsp.toLowerCase() === msp.toLowerCase());
+
+        let fdpMatch =
+            (fdp === '' ||
+             rowFdp.toLowerCase() === fdp.toLowerCase());
+
+        let rpMatch =
+            (rp === '' ||
+             rowRp.toLowerCase() === rp.toLowerCase());
+
+        if (
+            escalationTypeMatch &&
+            mspMatch &&
+            fdpMatch &&
+            rpMatch &&
+            row.getAttribute('data-status') !== 'Closed'
+        ) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
