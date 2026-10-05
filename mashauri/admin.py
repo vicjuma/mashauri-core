@@ -1,10 +1,11 @@
 from django.contrib import admin
-from .models import User, Dispatch, Ticket, SLA, Comment, DispatchStageHistory
+from .models import User, Dispatch, Ticket, SLA, Comment, DispatchStageHistory, DispatchImage
 from django.contrib.auth.models import Group
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.utils.html import format_html
 
 admin.site.unregister(Group)
 
@@ -71,8 +72,27 @@ class UserAdmin(BaseUserAdmin):
 
     exclude = ["groups", "user_permissions"]
 
+class DispatchImageInline(admin.TabularInline):
+    model = DispatchImage
+    extra = 1
+    fields = ('image', 'image_preview', 'image_type', 'uploaded_at')
+    readonly_fields = ('image_preview', 'uploaded_at')
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="120" height="80" '
+                'style="object-fit: cover; border-radius: 5px;" />',
+                obj.image.url
+            )
+        return "No image"
+
+    image_preview.short_description = "Preview"
+
 
 class DispatchAdmin(admin.ModelAdmin):
+    inlines = [DispatchImageInline]
+
     fieldsets = (
         ('Building Information', {
             'fields': ('building_name', 'building_id', 'coordinates'),

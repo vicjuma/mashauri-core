@@ -6,7 +6,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import User, Dispatch, Comment, DispatchStageHistory
+from .models import DispatchStageComment, User, Dispatch, Comment, DispatchStageHistory
 from datetime import timedelta
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
@@ -204,7 +204,6 @@ def dispatch_detail(request, pk):
         reverse('dispatch_detail', kwargs={'pk': pk}))
     email_recipients = determine_email_recipients(
         dispatch.msp, dispatch.fdp, dispatch.rp)
-    print(email_recipients)
 
     if request.method == 'POST':
         # Handle comment-only POST request
@@ -233,7 +232,6 @@ def dispatch_detail(request, pk):
         return image.image.url.lower().endswith('.pdf')
     
     is_img_pdf = is_pdf(filtered_image)
-    print(is_img_pdf)
     return render(request, 'mashauri/dispatch_details.html', {
         'dispatch': dispatch,
         'is_msp': current_user.role == 'MSP',
@@ -244,6 +242,7 @@ def dispatch_detail(request, pk):
         'user': current_user,
         'image': filtered_image,
         'is_img_pdf': is_img_pdf,
+        'escalation_types': Dispatch.ESCALATION_CHOICES,
     })
 
 @login_required
@@ -264,6 +263,11 @@ def rp_dispatch_detail(request, pk):
     ]
 
     current_stage = dispatch.stage
+    
+    stage_comments = DispatchStageComment.objects.filter(
+        stage_history__dispatch=dispatch).select_related(
+        'stage_history',
+        'commented_by').order_by('-created_at')
 
     # ---------------------------------------------------------
     # POST - MOVE TO NEXT STAGE
@@ -275,6 +279,7 @@ def rp_dispatch_detail(request, pk):
         if action == "move_next":
 
             comment = request.POST.get("comment", "").strip()
+            attachment = request.FILES.get("attachment")
 
             # -------------------------------------------------
             # Comment is mandatory
@@ -330,19 +335,130 @@ def rp_dispatch_detail(request, pk):
                 # Update current dispatch stage
                 dispatch.stage = next_stage
                 dispatch.save(update_fields=["stage", "updated_at"])
+               
+                stage_completed_at = timezone.now()
 
-                # Create permanent movement history
-                DispatchStageHistory.objects.create(
+                # Find when the current stage started
+                previous_history = DispatchStageHistory.objects.filter(
+                    dispatch=dispatch,
+                    to_stage=current_stage
+                ).order_by('-created_at').first()
+
+                if previous_history and previous_history.completed_at:
+                    stage_started_at = previous_history.completed_at
+                else:
+                    stage_started_at = dispatch.sla_timer
+                    if stage_started_at:
+                        if dispatch.escalation_type == 'Optimization':
+                            stage_started_at -= timedelta(hours=720)
+                        elif dispatch.escalation_type == 'OTB':
+                            stage_started_at -= timedelta(hours=1512)
+                        else:
+                            stage_started_at = dispatch.created_at
+                    else:
+                        stage_started_at = dispatch.created_at
+
+                stage_duration = stage_completed_at - stage_started_at
+
+                dispatch_stage_history = DispatchStageHistory.objects.create(
                     dispatch=dispatch,
                     from_stage=current_stage,
                     to_stage=next_stage,
                     comment=comment,
                     moved_by=current_user,
+                    started_at=stage_started_at,
+                    completed_at=stage_completed_at,
+                    duration_seconds=max(
+                        0,
+                        int(stage_duration.total_seconds())
+                    ),
                 )
+
+                if attachment:
+                    dispatch_stage_history.attachment = attachment
+                    dispatch_stage_history.save(update_fields=['attachment'])
 
             messages.success(
                 request,
                 f"Dispatch moved from {current_stage} to {next_stage}."
+            )
+
+            return redirect(
+                'rp_dispatch_detail',
+                pk=dispatch.pk
+            )
+        elif action == "comment_only":
+
+            stage_comment = request.POST.get("stage_comment", "").strip()
+            selected_stage = request.POST.get("stage", "").strip()
+            stage_attachment = request.FILES.get("attachment")
+
+            # -------------------------------------------------
+            # Stage comment is mandatory
+            # -------------------------------------------------
+            if not stage_comment:
+                messages.error(
+                    request,
+                    "Please provide a comment."
+                )
+
+                return redirect(
+                    'rp_dispatch_detail',
+                    pk=dispatch.pk
+                )
+
+            # -------------------------------------------------
+            # Make sure selected stage is valid
+            # -------------------------------------------------
+            if selected_stage not in stages:
+                messages.error(
+                    request,
+                    "The selected dispatch stage is invalid."
+                )
+
+                return redirect(
+                    'rp_dispatch_detail',
+                    pk=dispatch.pk
+                )
+
+            # -------------------------------------------------
+            # Create comment against the selected stage history
+            # -------------------------------------------------
+            stage_history = DispatchStageHistory.objects.filter(
+                dispatch=dispatch,
+                from_stage=selected_stage
+            ).order_by('-created_at').first()
+            print(stage_history)
+
+            if not stage_history:
+                messages.error(
+                    request,
+                    f"You cannot comment on {selected_stage}. The stage is not complete"
+                )
+
+                return redirect(
+                    'rp_dispatch_detail',
+                    pk=dispatch.pk
+                )
+
+            # -------------------------------------------------
+            # Save stage comment
+            # -------------------------------------------------
+            with transaction.atomic():
+
+                stage_comment_obj = DispatchStageComment.objects.create(
+                    stage_history=stage_history,
+                    comment=stage_comment,
+                    commented_by=current_user,
+                )
+
+                if stage_attachment:
+                    stage_comment_obj.attachment = stage_attachment
+                    stage_comment_obj.save(update_fields=['attachment'])
+
+            messages.success(
+                request,
+                f"Comment added to the {selected_stage} stage."
             )
 
             return redirect(
@@ -416,6 +532,8 @@ def rp_dispatch_detail(request, pk):
         # Existing data
         'full_url': full_url,
         'email_recipients': email_recipients,
+
+        'stage_comments': stage_comments
     }
 
     return render(

@@ -590,7 +590,6 @@ def send_notification_email(
             f"has been escalated to \"{msp}\" for core provisioning.\n\n"
             f"Click here for details: {full_url}.\n\nMashauri |Core."
         )
-    print(subject, message, recipients)
     send_mail(recipients, subject, message, attachment_path)
 
 
@@ -659,6 +658,15 @@ def prepare_email_details(dispatch, comment_content, full_url, action):
 def handle_comment_update(request, dispatch, user, email_recipients, full_url):
     comment_content = request.POST['comment']
     dispatch_image = request.FILES.get('comment_image')
+
+    escalation_type = request.POST.get('escalation_type')
+    escalation_changed = False
+
+    if escalation_type and escalation_type != dispatch.escalation_type:
+        dispatch.escalation_type = escalation_type
+        dispatch.save(update_fields=['escalation_type'])
+        escalation_changed = True
+    
     if dispatch_image:
         save_dispatch_image(dispatch, dispatch_image)
 
@@ -672,6 +680,9 @@ def handle_comment_update(request, dispatch, user, email_recipients, full_url):
     subject, message = prepare_email_details(
         dispatch, comment_content, full_url, "update")
     send_mail(email_recipients, subject, message)
+
+    if escalation_changed:
+        return redirect('redirect_to_dashboard')
 
     return redirect('dispatch_detail', pk=dispatch.pk)
 
@@ -702,7 +713,6 @@ def handle_dispatch_closing(request, dispatch, email_recipients, full_url):
     subject, message = prepare_email_details(
         dispatch, comment_content,
         full_url, "close")
-    print(email_recipients)
     send_mail(email_recipients, subject, message)
 
     return render(request, 'mashauri/success_deletion.html', {})
@@ -712,6 +722,7 @@ def handle_dispatch_closing(request, dispatch, email_recipients, full_url):
 def handle_dispatch_reassignment(
         request, dispatch, email_recipients, full_url):
     selected_value = request.POST.get('assignment')
+    selected_escalation = request.POST.get('escalation_type')
 
     msp_values = [value for value, label in Dispatch.MSP_CHOICES]
     rp_values = [value for value, label in Dispatch.RP_CHOICES]
@@ -724,6 +735,13 @@ def handle_dispatch_reassignment(
         dispatch.msp = None
         dispatch.rp = selected_value
         dispatch.reassign_to = selected_value
+
+        if selected_escalation:
+            dispatch.escalation_type = selected_escalation
+        if selected_escalation == 'Optimization':
+            dispatch.sla_timer = now() + timedelta(hours=720)
+        elif selected_escalation == 'OTB':
+            dispatch.sla_timer = now() + timedelta(hours=1512)
     elif selected_value == 'ENTERPRISE CONNECTIVITY':
         dispatch.msp = None
         dispatch.rp = None

@@ -17,7 +17,7 @@ urlpatterns = [
         'dashboard/dispatch-details/<int:pk>/',
         views.dispatch_detail, name='dispatch_detail'),
     path(
-        'dashboard/rp-dispatch-details/<int:pk>/',
+        'dashboard/optimization-otb-dispatch-details/<int:pk>/',
         views.rp_dispatch_detail,
         name='rp_dispatch_detail'),
     path('presentation/', views.plots_visualization, name='presentation'),
