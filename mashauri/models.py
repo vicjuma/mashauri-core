@@ -78,6 +78,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         Extra_Dimensions = "Extra Dimensions", "Extra Dimensions"
         Quavatel = "Quavatel", "Quavatel"
         Acl = "Acl", "Acl"
+        Soliton = "Soliton", "Soliton"
 
     base_role = Role.ADMIN
     username = models.CharField(max_length=50, unique=True)
@@ -186,6 +187,7 @@ class Dispatch(models.Model):
         ('Extra Dimensions', 'Extra Dimensions'),
         ('Quavatel', 'Quavatel'),
         ('Acl', 'Acl'),
+        ('Soliton', 'Soliton'),
     ]
 
     STAGE_CHOICES = [
@@ -207,7 +209,7 @@ class Dispatch(models.Model):
         max_length=50,
         choices=MSP_CHOICES, default=None, null=True)
     fdp = models.CharField(max_length=50, choices=FDP_CHOICES)
-    rp = models.CharField(max_length=50, choices=RP_CHOICES)
+    rp = models.CharField(max_length=50, choices=RP_CHOICES, default=None, null=True)
     ec = models.CharField(
         max_length=50,
         choices=EC_CHOICES, default='Steven Ogola')
@@ -367,6 +369,12 @@ class DispatchStageHistory(models.Model):
 
     comment = models.TextField()
 
+    attachment = models.FileField(
+        upload_to='dispatch_stage_history/',
+        null=True,
+        blank=True,
+    )
+
     moved_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -374,4 +382,75 @@ class DispatchStageHistory(models.Model):
         blank=True
     )
 
+    # TIMINGS
+    started_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    # When the dispatch left the stage
+    completed_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    # Time spent in this stage, stored in seconds
+    duration_seconds = models.PositiveBigIntegerField(
+        null=True,
+        blank=True
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return (
+            f'{self.dispatch} | '
+            f'{self.from_stage} → {self.to_stage}'
+        )
+    @property
+    def duration(self):
+        """
+        Returns the time spent in this stage as a timedelta.
+        """
+        if self.duration_seconds is not None:
+            return timedelta(seconds=self.duration_seconds)
+
+        return None
+
+
+class DispatchStageComment(models.Model):
+    stage_history = models.ForeignKey(
+        DispatchStageHistory,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+
+    comment = models.TextField()
+
+    attachment = models.FileField(
+        upload_to='dispatch_stage_comments/',
+        null=True,
+        blank=True,
+    )
+
+    commented_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='dispatch_stage_comments'
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return (
+            f'Comment by {self.commented_by} '
+            f'on stage history {self.stage_history.id}'
+        )
+
+    class Meta:
+        db_table = 'mashauri_dispatch_stage_comments'
+        verbose_name = 'Dispatch Stage Comment'
+        verbose_name_plural = 'Dispatch Stage Comments'
+        ordering = ['created_at']
