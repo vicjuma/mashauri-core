@@ -1,42 +1,408 @@
-<section class="container">
-    <header>
-      <nav class="navbar-menu">
-        
-        <!-- Menu normal -->
-        <ul class="menu">
-          <li><a href="{% url 'redirect_to_dashboard' %}">Dashboard Home</a>
-          </li>
-          <li><a href="{% url 'dispatch' %}">Dispatch</a>
-          </li>
-          <li><a href="{% url 'presentation' %}">Presentation</a>
-          </li>
-          <li><a href="{% url 'average_sla' %}">Average SLA</a>
-          </li>
-          </li>
-          <li><a href="{% url 'logout' %}">Logout</a>
-          </li>
-        </ul>
-        
-        <!-- Mini Menu -->
-        <nav class="navbar-mini-menu">
-          <div class="menu-select">
-            <span class="menu-actual">
-              Mashauri
-            </span>
-            <span class="btn-select">
-              
-            </span>
-          </div>
-          <ul class="mini-menu-options">
-            <li><a href="{% url 'redirect_to_dashboard' %}">Home</a></li>
-            <li tabIndex="0"><a href="{% url 'dispatch' %}">Dispatch</a></li>
-            <li tabIndex="0"><a  href="{% url 'presentation' %}">Presentation</a></li>
-            <li><a href="{% url 'average_sla' %}">Average SLA</a>
-            </li>
-            
-          </ul> <!-- Fin lista mini menu -->
-        </nav> <!-- Fin mini menu -->
-        
-      </nav> <!-- Fin menu general (nav) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<section class="container mx-auto w-full px-4">
+    <header class="w-full">
+        <nav class="flex w-full justify-center">
+            <ul class="menu flex flex-wrap items-center justify-center gap-1">
+                <li>
+                    <a href="{% url 'redirect_to_dashboard' %}"
+                       class="inline-flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-gray-700 transition-colors duration-200 hover:bg-[#EAF8EE] hover:text-[#167A2F] focus:outline-none focus:ring-2 focus:ring-[#46BD61] focus:ring-offset-2">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="h-4 w-4 shrink-0 text-[#2E9E4F]"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M3 12l9-9 9 9M5 10v10h14V10" />
+                        </svg>
+                        <span>Dashboard Home</span>
+                    </a>
+                </li>
+
+                <li class="relative">
+                    <button type="button"
+                            id="workflowToggle"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            class="group inline-flex cursor-pointer items-center gap-2 rounded-lg border border-transparent px-3 py-2 font-medium text-gray-700 transition-colors duration-200 hover:border-[#B7E8C2] hover:bg-[#EAF8EE] hover:text-[#167A2F] focus:border-[#46BD61] focus:bg-[#EAF8EE] focus:text-[#167A2F] focus:outline-none focus:ring-2 focus:ring-[#46BD61] focus:ring-offset-2">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="h-4 w-4 shrink-0 text-[#2E9E4F]"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M4 6h16M4 12h10M4 18h16" />
+                        </svg>
+
+                        <span>Workflow</span>
+
+                        <svg id="workflowChevron"
+                             xmlns="http://www.w3.org/2000/svg"
+                             class="h-4 w-4 text-gray-500 transition-transform duration-200 group-hover:text-[#167A2F]"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <ul id="workflowMenu"
+                        class="absolute left-1/2 top-full z-[9999] mt-2 w-72 -translate-x-1/2 list-none overflow-hidden rounded-2xl border border-gray-200 bg-white p-2 shadow-xl ring-1 ring-black/5"
+                        style="display: none;">
+
+                        <li class="mb-1">
+                            <a href="{% url 'redirect_to_dashboard' %}"
+                               class="group flex items-center gap-3 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-[#EAF8EE] focus:bg-[#EAF8EE] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#46BD61]">
+
+                                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#EAF8EE] text-[#167A2F] transition-colors duration-200 group-hover:bg-[#2E9E4F] group-hover:text-white group-focus:bg-[#2E9E4F] group-focus:text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="h-5 w-5"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor"
+                                         stroke-width="2">
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              d="M4 6h16M4 12h16M4 18h16" />
+                                    </svg>
+                                </span>
+
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-sm font-semibold text-gray-900 group-hover:text-[#125C25] group-focus:text-[#125C25]">
+                                        Normal Workflow
+                                    </span>
+                                    <span class="mt-0.5 block text-xs font-medium text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700">
+                                        Standard dispatch flow
+                                    </span>
+                                </span>
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="h-4 w-4 shrink-0 text-gray-500 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#167A2F] group-focus:translate-x-1 group-focus:text-[#167A2F]"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </li>
+
+                        <li class="mb-1">
+                            <a href="{% url 'redirect_to_optimization_dashboard' %}"
+                               class="group flex items-center gap-3 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-[#EAF8EE] focus:bg-[#EAF8EE] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#46BD61]">
+
+                                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#EAF8EE] text-[#167A2F] transition-colors duration-200 group-hover:bg-[#2E9E4F] group-hover:text-white group-focus:bg-[#2E9E4F] group-focus:text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="h-5 w-5"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor"
+                                         stroke-width="2">
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                </span>
+
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-sm font-semibold text-gray-900 group-hover:text-[#125C25] group-focus:text-[#125C25]">
+                                        Optimization Workflow
+                                    </span>
+                                    <span class="mt-0.5 block text-xs font-medium text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700">
+                                        Optimized dispatch flow
+                                    </span>
+                                </span>
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="h-4 w-4 shrink-0 text-gray-500 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#167A2F] group-focus:translate-x-1 group-focus:text-[#167A2F]"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'redirect_to_otb_dashboard' %}"
+                               class="group flex items-center gap-3 rounded-xl px-3 py-3 transition-colors duration-200 hover:bg-[#EAF8EE] focus:bg-[#EAF8EE] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#46BD61]">
+
+                                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#EAF8EE] text-[#167A2F] transition-colors duration-200 group-hover:bg-[#2E9E4F] group-hover:text-white group-focus:bg-[#2E9E4F] group-focus:text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="h-5 w-5"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor"
+                                         stroke-width="2">
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                                    </svg>
+                                </span>
+
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-sm font-semibold text-gray-900 group-hover:text-[#125C25] group-focus:text-[#125C25]">
+                                        OTB Workflow
+                                    </span>
+                                    <span class="mt-0.5 block text-xs font-medium text-gray-600 group-hover:text-gray-700 group-focus:text-gray-700">
+                                        OTB dispatch flow
+                                    </span>
+                                </span>
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="h-4 w-4 shrink-0 text-gray-500 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#167A2F] group-focus:translate-x-1 group-focus:text-[#167A2F]"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{% url 'dispatch' %}"
+                       class="inline-flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-gray-700 transition-colors duration-200 hover:bg-[#EAF8EE] hover:text-[#167A2F] focus:bg-[#EAF8EE] focus:text-[#167A2F] focus:outline-none focus:ring-2 focus:ring-[#46BD61] focus:ring-offset-2">
+                        Dispatch
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'presentation' %}"
+                       class="inline-flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-gray-700 transition-colors duration-200 hover:bg-[#EAF8EE] hover:text-[#167A2F] focus:bg-[#EAF8EE] focus:text-[#167A2F] focus:outline-none focus:ring-2 focus:ring-[#46BD61] focus:ring-offset-2">
+                        Presentation
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'average_sla' %}"
+                       class="inline-flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-gray-700 transition-colors duration-200 hover:bg-[#EAF8EE] hover:text-[#167A2F] focus:bg-[#EAF8EE] focus:text-[#167A2F] focus:outline-none focus:ring-2 focus:ring-[#46BD61] focus:ring-offset-2">
+                        Average SLA
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'logout' %}"
+                       class="inline-flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-gray-700 transition-colors duration-200 hover:bg-red-50 hover:text-red-700 focus:bg-red-50 focus:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+
+            <nav class="navbar-mini-menu">
+                <div class="menu-select">
+                    <span class="menu-actual">
+                        Mashauri
+                    </span>
+
+                    <span class="btn-select"></span>
+                </div>
+
+                <ul class="mini-menu-options">
+
+                    <li>
+                        <a href="{% url 'redirect_to_dashboard' %}"
+                           class="block rounded-lg px-4 py-2.5 font-medium text-gray-800 transition-colors duration-200 hover:bg-[#EAF8EE] hover:text-[#167A2F] focus:bg-[#EAF8EE] focus:text-[#167A2F] focus:outline-none">
+                            Home
+                        </a>
+                    </li>
+
+                    <li class="relative">
+
+                        <button type="button"
+                                id="miniWorkflowToggle"
+                                aria-expanded="false"
+                                aria-haspopup="true"
+                                class="flex w-full items-center justify-between rounded-lg border-0 bg-transparent px-4 py-2.5 text-left font-medium text-gray-800 transition-colors duration-200 hover:bg-[#EAF8EE] hover:text-[#167A2F] focus:bg-[#EAF8EE] focus:text-[#167A2F] focus:outline-none">
+
+                            <span class="flex items-center gap-2">
+                                <span>Workflow</span>
+
+                                <span class="rounded-full bg-[#D8F3DE] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#167A2F]">
+                                    Menu
+                                </span>
+                            </span>
+
+                            <svg id="miniWorkflowChevron"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 class="h-4 w-4 text-gray-500 transition-transform duration-200"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <ul id="miniWorkflowMenu"
+                            class="list-none overflow-hidden rounded-xl border border-[#CFEAD5] bg-[#F5F9F6] p-1 shadow-sm"
+                            style="display: none;">
+
+                            <li>
+                                <a href="{% url 'redirect_to_dashboard' %}"
+                                   class="block rounded-lg px-4 py-2.5 text-sm font-medium text-gray-800 transition-colors duration-200 hover:bg-white hover:text-[#167A2F] focus:bg-white focus:text-[#167A2F] focus:outline-none">
+                                    Normal Workflow
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'redirect_to_optimization_dashboard' %}"
+                                   class="block rounded-lg px-4 py-2.5 text-sm font-medium text-gray-800 transition-colors duration-200 hover:bg-white hover:text-[#167A2F] focus:bg-white focus:text-[#167A2F] focus:outline-none">
+                                    Optimization Workflow
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'redirect_to_otb_dashboard' %}"
+                                   class="block rounded-lg px-4 py-2.5 text-sm font-medium text-gray-800 transition-colors duration-200 hover:bg-white hover:text-[#167A2F] focus:bg-white focus:text-[#167A2F] focus:outline-none">
+                                    OTB Workflow
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li tabindex="0">
+                        <a href="{% url 'dispatch' %}"
+                           class="block rounded-lg px-4 py-2.5 font-medium text-gray-800 transition-colors duration-200 hover:bg-[#EAF8EE] hover:text-[#167A2F] focus:bg-[#EAF8EE] focus:text-[#167A2F] focus:outline-none">
+                            Dispatch
+                        </a>
+                    </li>
+
+                    <li tabindex="0">
+                        <a href="{% url 'presentation' %}"
+                           class="block rounded-lg px-4 py-2.5 font-medium text-gray-800 transition-colors duration-200 hover:bg-[#EAF8EE] hover:text-[#167A2F] focus:bg-[#EAF8EE] focus:text-[#167A2F] focus:outline-none">
+                            Presentation
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'average_sla' %}"
+                           class="block rounded-lg px-4 py-2.5 font-medium text-gray-800 transition-colors duration-200 hover:bg-[#EAF8EE] hover:text-[#167A2F] focus:bg-[#EAF8EE] focus:text-[#167A2F] focus:outline-none">
+                            Average SLA
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'logout' %}"
+                           class="block rounded-lg px-4 py-2.5 font-medium text-gray-800 transition-colors duration-200 hover:bg-red-50 hover:text-red-700 focus:bg-red-50 focus:text-red-700 focus:outline-none">
+                            Logout
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        </nav>
     </header>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const workflowToggle = document.getElementById('workflowToggle');
+    const workflowMenu = document.getElementById('workflowMenu');
+    const workflowChevron = document.getElementById('workflowChevron');
+
+    const miniWorkflowToggle = document.getElementById('miniWorkflowToggle');
+    const miniWorkflowMenu = document.getElementById('miniWorkflowMenu');
+    const miniWorkflowChevron = document.getElementById('miniWorkflowChevron');
+
+    if (workflowToggle && workflowMenu) {
+        workflowToggle.addEventListener('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isOpen = workflowMenu.style.display === 'block';
+
+            workflowMenu.style.display = isOpen ? 'none' : 'block';
+            workflowToggle.setAttribute('aria-expanded', String(!isOpen));
+
+            if (workflowChevron) {
+                workflowChevron.classList.toggle('rotate-180', !isOpen);
+            }
+
+            if (!isOpen && miniWorkflowMenu) {
+                miniWorkflowMenu.style.display = 'none';
+                miniWorkflowToggle?.setAttribute('aria-expanded', 'false');
+                miniWorkflowChevron?.classList.remove('rotate-180');
+            }
+        });
+
+        workflowMenu.addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+    }
+
+    if (miniWorkflowToggle && miniWorkflowMenu) {
+        miniWorkflowToggle.addEventListener('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isOpen = miniWorkflowMenu.style.display === 'block';
+
+            miniWorkflowMenu.style.display = isOpen ? 'none' : 'block';
+            miniWorkflowToggle.setAttribute('aria-expanded', String(!isOpen));
+
+            if (miniWorkflowChevron) {
+                miniWorkflowChevron.classList.toggle('rotate-180', !isOpen);
+            }
+
+            if (!isOpen && workflowMenu) {
+                workflowMenu.style.display = 'none';
+                workflowToggle?.setAttribute('aria-expanded', 'false');
+                workflowChevron?.classList.remove('rotate-180');
+            }
+        });
+
+        miniWorkflowMenu.addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+    }
+
+    document.addEventListener('click', function () {
+        if (workflowMenu) {
+            workflowMenu.style.display = 'none';
+            workflowToggle?.setAttribute('aria-expanded', 'false');
+            workflowChevron?.classList.remove('rotate-180');
+        }
+
+        if (miniWorkflowMenu) {
+            miniWorkflowMenu.style.display = 'none';
+            miniWorkflowToggle?.setAttribute('aria-expanded', 'false');
+            miniWorkflowChevron?.classList.remove('rotate-180');
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            if (workflowMenu) {
+                workflowMenu.style.display = 'none';
+                workflowToggle?.setAttribute('aria-expanded', 'false');
+                workflowChevron?.classList.remove('rotate-180');
+            }
+
+            if (miniWorkflowMenu) {
+                miniWorkflowMenu.style.display = 'none';
+                miniWorkflowToggle?.setAttribute('aria-expanded', 'false');
+                miniWorkflowChevron?.classList.remove('rotate-180');
+            }
+        }
+    });
+});
+</script>

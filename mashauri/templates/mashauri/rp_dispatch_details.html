@@ -1,18 +1,12 @@
 {% load static %}
-
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Dispatch #{{ dispatch.id }} | Details</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dispatch #{{ dispatch.id }} | Details</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
     tailwind.config = {
         theme: {
             extend: {
@@ -25,2093 +19,1059 @@
             }
         }
     }
-</script>
-
-</head>
-
-<body class="min-h-screen bg-[#F5F9F6] text-gray-800">
-
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-
-    <div class="flex items-center justify-between">
-
-        <div>
-            <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#46BD61]"></span>
-
-                <span class="text-xs font-bold uppercase tracking-[0.18em] text-[#46BD61]">
-                    Mashauri
-                </span>
-            </div>
-
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mt-1">
-                Dispatch Details
-            </h1>
-        </div>
-
-        <a href="{% url 'rp_dashboard' %}"
-           class="group inline-flex items-center gap-2
-                  bg-white border border-[#46BD61]
-                  text-[#35A850]
-                  px-4 sm:px-5 py-2.5
-                  rounded-full
-                  font-semibold text-sm
-                  shadow-sm
-                  hover:bg-[#46BD61]
-                  hover:text-white
-                  hover:shadow-md
-                  transition-all duration-200">
-
-            <span class="flex items-center justify-center
-                         w-7 h-7 rounded-full
-                         bg-[#EAF8EE]
-                         group-hover:bg-white/20
-                         transition">
-
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="w-4 h-4"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
-                     stroke-width="2.5">
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M15 19l-7-7 7-7"/>
-
-                </svg>
-
-            </span>
-
-            <span class="hidden sm:inline">
-                Back to Dashboard
-            </span>
-
-            <span class="sm:hidden">
-                Back
-            </span>
-
-        </a>
-
-    </div>
-
-</div>
-
-<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-    {% if messages %}
-    <div class="mb-6 space-y-3">
-        {% for message in messages %}
-        <div class="flex items-center gap-3
-                    rounded-xl border
-                    px-4 py-3
-                    {% if message.tags == 'success' %}
-                        bg-[#EAF8EE] border-green-100 text-[#35A850]
-                    {% elif message.tags == 'error' %}
-                        bg-red-50 border-red-100 text-red-700
-                    {% elif message.tags == 'warning' %}
-                        bg-yellow-50 border-yellow-100 text-yellow-700
-                    {% else %}
-                        bg-blue-50 border-blue-100 text-blue-700
-                    {% endif %}">
-
-            <span class="font-semibold text-sm">
-                {{ message }}
-            </span>
-
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <section class="bg-white rounded-2xl
-                    border border-green-100
-                    shadow-sm overflow-hidden mb-6">
-
-        <div class="p-6 sm:p-8">
-
-            <div class="flex flex-col lg:flex-row
-                        lg:items-center
-                        lg:justify-between
-                        gap-6">
-
+        </script>
+    </head>
+    <body class="min-h-screen bg-[#F5F9F6] text-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+            <div class="flex items-center justify-between">
                 <div>
-
-                    <div class="flex flex-wrap items-center gap-3 mb-3">
-
-                        <span class="inline-flex items-center
-                                     px-3 py-1 rounded-full
-                                     bg-[#EAF8EE]
-                                     text-[#35A850]
-                                     text-xs font-bold
-                                     uppercase tracking-wide">
-
-                            Dispatch #{{ dispatch.id }}
-
-                        </span>
-
-                        {% if dispatch.status == "Closed" %}
-
-                        <span class="inline-flex items-center gap-1.5
-                                     px-3 py-1 rounded-full
-                                     bg-green-100 text-green-700
-                                     text-xs font-bold">
-
-                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                            Closed
-
-                        </span>
-
-                        {% elif dispatch.status == "Progress" %}
-
-                        <span class="inline-flex items-center gap-1.5
-                                     px-3 py-1 rounded-full
-                                     bg-yellow-100 text-yellow-700
-                                     text-xs font-bold">
-
-                            <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                            In Progress
-
-                        </span>
-
-                        {% else %}
-
-                        <span class="inline-flex items-center gap-1.5
-                                     px-3 py-1 rounded-full
-                                     bg-gray-100 text-gray-600
-                                     text-xs font-bold">
-
-                            <span class="w-2 h-2 rounded-full bg-gray-400"></span>
-                            {{ dispatch.status }}
-
-                        </span>
-
-                        {% endif %}
-
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#46BD61]"></span>
+                        <span class="text-xs font-bold uppercase tracking-[0.18em] text-[#46BD61]">Mashauri</span>
                     </div>
-
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
-                        {{ dispatch.building_name }}
-                    </h2>
-
-                    <p class="mt-2 text-sm text-gray-500">
-                        Building ID:
-                        <span class="font-semibold text-gray-700">
-                            {{ dispatch.building_id|default:"Not provided" }}
-                        </span>
-                    </p>
-
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mt-1">Dispatch Details</h1>
                 </div>
-
-                <div class="lg:text-right">
-
-                    <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">
-                        Escalation Type
-                    </p>
-
-                    <span class="inline-flex items-center gap-2
-                                 px-4 py-2
-                                 rounded-xl
-                                 bg-[#46BD61]
-                                 text-white
-                                 font-bold
-                                 shadow-sm">
-
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             class="w-5 h-5"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke="currentColor"
-                             stroke-width="2">
-
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M13 10V3L4 14h7v7l9-11h-7z"/>
-
-                        </svg>
-
-                        {{ dispatch.escalation_type }}
-
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="h-1 bg-[#46BD61]"></div>
-
-    </section>
-
-    <section class="bg-white rounded-2xl
-                    border border-green-100
-                    shadow-sm overflow-hidden mb-6">
-
-        <div class="px-6 py-6 sm:px-8 border-b border-gray-100">
-
-            <div class="flex flex-col sm:flex-row
-                        sm:items-center
-                        sm:justify-between
-                        gap-4">
-
-                <div>
-
-                    <div class="flex items-center gap-3">
-
-                        <div class="w-11 h-11 rounded-xl
-                                    bg-[#EAF8EE]
-                                    flex items-center justify-center">
-
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="w-6 h-6 text-[#46BD61]"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M9 12l2 2 4-4"/>
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/>
-
-                            </svg>
-
-                        </div>
-
-                        <div>
-
-                            <h3 class="font-bold text-gray-900 text-lg">
-                                Dispatch Workflow
-                            </h3>
-
-                            <p class="text-xs text-gray-500 mt-1">
-                                Track the dispatch through each operational stage
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                {% if is_on_hold %}
-
-                <span class="inline-flex items-center gap-2
-                             px-4 py-2
-                             rounded-xl
-                             bg-yellow-50
-                             border border-yellow-100
-                             text-yellow-700
-                             text-sm font-bold">
-
-                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-                    On Hold
-
-                </span>
-
-                {% elif is_dropped %}
-
-                <span class="inline-flex items-center gap-2
-                             px-4 py-2
-                             rounded-xl
-                             bg-red-50
-                             border border-red-100
-                             text-red-700
-                             text-sm font-bold">
-
-                    <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                    Dropped
-
-                </span>
-
+                <a href="
+                {% if dispatch.escalation_type == 'Optimization' %}
+                    {% url 'redirect_to_optimization_dashboard' %}
+                {% elif dispatch.escalation_type == 'OTB' %}
+                    {% url 'redirect_to_otb_dashboard' %}
                 {% else %}
-
-                <div class="text-left sm:text-right">
-
-                    <p class="text-xs uppercase tracking-widest text-gray-400">
-                        Current Stage
-                    </p>
-
-                    <p class="mt-1 text-lg font-bold text-[#35A850]">
-                        {{ current_stage }}
-                    </p>
-
-                </div>
-
+                    {% url 'redirect_to_dashboard' %}
                 {% endif %}
-
-            </div>
-
-        </div>
-
-        <div class="p-6 sm:p-8">
-
-            {% if is_on_hold %}
-
-            <div class="rounded-2xl
-                        bg-yellow-50
-                        border border-yellow-100
-                        p-6">
-
-                <div class="flex items-start gap-4">
-
-                    <div class="w-11 h-11 rounded-full
-                                bg-yellow-100
-                                flex items-center justify-center
-                                flex-shrink-0">
-
-                        <span class="text-yellow-600 font-bold text-lg">
-                            !
-                        </span>
-
-                    </div>
-
-                    <div>
-
-                        <h4 class="font-bold text-yellow-800">
-                            Dispatch is currently on hold
-                        </h4>
-
-                        <p class="text-sm text-yellow-700 mt-1">
-                            This dispatch is temporarily paused and cannot be moved to the next workflow stage.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            {% elif is_dropped %}
-
-            <div class="rounded-2xl
-                        bg-red-50
-                        border border-red-100
-                        p-6">
-
-                <div class="flex items-start gap-4">
-
-                    <div class="w-11 h-11 rounded-full
-                                bg-red-100
-                                flex items-center justify-center
-                                flex-shrink-0">
-
-                        <span class="text-red-600 font-bold text-lg">
-                            ×
-                        </span>
-
-                    </div>
-
-                    <div>
-
-                        <h4 class="font-bold text-red-800">
-                            Dispatch has been dropped
-                        </h4>
-
-                        <p class="text-sm text-red-700 mt-1">
-                            This dispatch is no longer progressing through the normal workflow.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            {% else %}
-
-            <div class="mb-8">
-
-                <div class="flex items-center justify-between text-sm mb-2">
-
-                    <span class="font-semibold text-gray-600">
-                        Workflow Progress
-                    </span>
-
-                    <span class="font-bold text-[#35A850]">
-                        {{ current_stage_index|add:"1" }} / {{ stages|length }}
-                    </span>
-
-                </div>
-
-                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
-
-                    {% widthratio current_stage_index stages|length 100 as progress %}
-
-                    <div class="h-full bg-[#46BD61] rounded-full transition-all duration-500"
-                         style="width: {{ progress }}%;">
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="overflow-x-auto pb-3">
-
-                <div class="min-w-[850px]">
-
-                    <div class="flex items-start">
-
-                        {% for stage in stages %}
-
-                        <div class="flex-1 relative">
-
-                            {% if not forloop.last %}
-
-                            <div class="absolute top-5 left-1/2 right-0 h-0.5
-                                        {% if current_stage_index > forloop.counter0 %}
-                                            bg-[#46BD61]
-                                        {% else %}
-                                            bg-gray-200
-                                        {% endif %}">
-                            </div>
-
-                            {% endif %}
-
-                            <div class="relative flex flex-col items-center">
-
-                                {% if forloop.counter0 < current_stage_index %}
-
-                                <div class="w-10 h-10 rounded-full
-                                            bg-[#46BD61]
-                                            text-white
-                                            flex items-center justify-center
-                                            font-bold
-                                            border-4 border-white
-                                            shadow-md
-                                            z-10">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="w-5 h-5"
-                                         fill="none"
-                                         viewBox="0 0 24 24"
-                                         stroke="currentColor"
-                                         stroke-width="3">
-
-                                        <path stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              d="M5 13l4 4L19 7"/>
-
-                                    </svg>
-
-                                </div>
-
-                                {% elif forloop.counter0 == current_stage_index %}
-
-                                <div class="w-10 h-10 rounded-full
-                                            bg-white
-                                            border-4 border-[#46BD61]
-                                            text-[#35A850]
-                                            flex items-center justify-center
-                                            font-bold
-                                            shadow-md
-                                            z-10">
-
-                                    <span class="w-3 h-3 rounded-full bg-[#46BD61]"></span>
-
-                                </div>
-
-                                {% else %}
-
-                                <div class="w-10 h-10 rounded-full
-                                            bg-gray-100
-                                            border-4 border-white
-                                            text-gray-400
-                                            flex items-center justify-center
-                                            font-bold
-                                            shadow
-                                            z-10">
-
-                                    <span class="text-sm">
-                                        {{ forloop.counter }}
-                                    </span>
-
-                                </div>
-
-                                {% endif %}
-
-                                <div class="mt-3 text-center px-2">
-
-                                    <p class="text-sm font-semibold
-                                              {% if forloop.counter0 <= current_stage_index %}
-                                                  text-gray-900
-                                              {% else %}
-                                                  text-gray-400
-                                              {% endif %}">
-
-                                        {{ stage }}
-
-                                    </p>
-
-                                    {% if forloop.counter0 < current_stage_index %}
-
-                                    <p class="text-xs text-[#46BD61] mt-1 font-medium">
-                                        Completed
-                                    </p>
-
-                                    {% elif forloop.counter0 == current_stage_index %}
-
-                                    <p class="text-xs text-[#35A850] mt-1 font-bold">
-                                        Current
-                                    </p>
-
-                                    {% else %}
-
-                                    <p class="text-xs text-gray-400 mt-1">
-                                        Upcoming
-                                    </p>
-
-                                    {% endif %}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        {% endfor %}
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            {% if can_move_next %}
-
-            <div class="mt-8 flex flex-col sm:flex-row
-                        sm:items-center
-                        sm:justify-between
-                        gap-4
-                        rounded-2xl
-                        bg-[#F5F9F6]
-                        border border-green-100
-                        p-5">
-
-                <div>
-
-                    <p class="text-sm font-semibold text-gray-900">
-                        Ready for the next stage?
-                    </p>
-
-                    <p class="text-xs text-gray-500 mt-1">
-                        Current stage:
-                        <span class="font-semibold text-gray-700">
-                            {{ current_stage }}
-                        </span>
-                        <span class="mx-1">→</span>
-                        <span class="font-semibold text-[#35A850]">
-                            {{ next_stage }}
-                        </span>
-                    </p>
-
-                </div>
-
-                <button type="button"
-                        onclick="openStageModal()"
-                        class="inline-flex items-center justify-center gap-2
-                               bg-[#46BD61]
-                               hover:bg-[#35A850]
-                               text-white
-                               px-5 py-3
-                               rounded-xl
-                               font-bold text-sm
-                               shadow-sm
-                               hover:shadow-md
-                               transition-all duration-200">
-
-                    Move to {{ next_stage }}
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         class="w-5 h-5"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="2.5">
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M5 12h14"/>
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M13 6l6 6-6 6"/>
-
-                    </svg>
-
-                </button>
-
-            </div>
-
-            {% else %}
-
-            <div class="mt-8 rounded-2xl
-                        bg-[#EAF8EE]
-                        border border-green-100
-                        p-5">
-
-                <div class="flex items-center gap-3">
-
-                    <div class="w-10 h-10 rounded-full
-                                bg-[#46BD61]
-                                text-white
-                                flex items-center justify-center">
-
+            "
+                   class="group inline-flex items-center gap-2 bg-white border border-[#46BD61] text-[#35A850] px-4 sm:px-5 py-2.5 rounded-full font-semibold text-sm shadow-sm hover:bg-[#46BD61] hover:text-white hover:shadow-md transition-all duration-200">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-full bg-[#EAF8EE] group-hover:bg-white/20 transition">
                         <svg xmlns="http://www.w3.org/2000/svg"
-                             class="w-5 h-5"
+                             class="w-4 h-4"
                              fill="none"
                              viewBox="0 0 24 24"
                              stroke="currentColor"
                              stroke-width="2.5">
-
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M5 13l4 4L19 7"/>
-
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                         </svg>
-
-                    </div>
-
-                    <div>
-
-                        <p class="font-bold text-[#35A850]">
-                            Final Workflow Stage
-                        </p>
-
-                        <p class="text-sm text-gray-600 mt-1">
-                            This dispatch has reached {{ current_stage }}.
-                        </p>
-
-                    </div>
-
-                </div>
-
+                    </span>
+                    <span class="hidden sm:inline">Back to Dashboard</span>
+                    <span class="sm:hidden">Back</span>
+                </a>
             </div>
-
-            {% endif %}
-
-            {% endif %}
-
         </div>
-
-    </section>
-
-    {% if stage_history %}
-
-    <section class="bg-white rounded-2xl
-                    border border-gray-100
-                    shadow-sm overflow-hidden mb-6">
-
-        <div class="px-6 py-5 border-b border-gray-100">
-
-            <div class="flex items-center gap-3">
-
-                <div class="w-10 h-10 rounded-xl
-                            bg-[#EAF8EE]
-                            flex items-center justify-center">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         class="w-5 h-5 text-[#46BD61]"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="2">
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M8 7h12M8 12h12M8 17h12"/>
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M4 7h.01M4 12h.01M4 17h.01"/>
-
-                    </svg>
-
-                </div>
-
-                <div>
-
-                    <h3 class="font-bold text-gray-900">
-                        Stage Movement History
-                    </h3>
-
-                    <p class="text-xs text-gray-500 mt-1">
-                        Recorded comments and workflow transitions
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="p-6 sm:p-8">
-
-            <div class="relative ml-2 sm:ml-4">
-
-                <div class="absolute left-4 top-2 bottom-2 w-0.5 bg-green-100"></div>
-
-                <div class="space-y-7">
-
-                    {% for history in stage_history %}
-
-                    <div class="relative pl-12">
-
-                        <div class="absolute left-0 top-1
-                                    w-9 h-9 rounded-full
-                                    bg-[#EAF8EE]
-                                    border-4 border-white
-                                    shadow
-                                    flex items-center justify-center
-                                    z-10">
-
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="w-4 h-4 text-[#46BD61]"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor"
-                                 stroke-width="2.5">
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M5 12h14"/>
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M13 6l6 6-6 6"/>
-
-                            </svg>
-
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {% if messages %}
+                <div class="mb-6 space-y-3">
+                    {% for message in messages %}
+                        <div class="flex items-center gap-3 rounded-xl border px-4 py-3 {% if message.tags == 'success' %} bg-[#EAF8EE] border-green-100 text-[#35A850] {% elif message.tags == 'error' %} bg-red-50 border-red-100 text-red-700 {% elif message.tags == 'warning' %} bg-yellow-50 border-yellow-100 text-yellow-700 {% else %} bg-blue-50 border-blue-100 text-blue-700 {% endif %}">
+                            <span class="font-semibold text-sm">{{ message }}</span>
                         </div>
-
-                        <div class="rounded-xl
-                                    border border-gray-100
-                                    bg-[#F9FCFA]
-                                    p-5">
-
-                            <div class="flex flex-col sm:flex-row
-                                        sm:items-center
-                                        sm:justify-between
-                                        gap-2">
-
-                                <div class="flex flex-wrap items-center gap-2">
-
-                                    <span class="text-sm font-bold text-gray-900">
-                                        {{ history.from_stage }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <section class="bg-white rounded-2xl border border-green-100 shadow-sm overflow-hidden mb-6">
+                <div class="p-6 sm:p-8">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-3 mb-3">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-[#EAF8EE] text-[#35A850] text-xs font-bold uppercase tracking-wide">
+                                    Dispatch #{{ dispatch.id }}
+                                </span>
+                                {% if dispatch.status == "Closed" %}
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                        Closed
                                     </span>
-
+                                {% elif dispatch.status == "Progress" %}
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold">
+                                        <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                                        In Progress
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold">
+                                        <span class="w-2 h-2 rounded-full bg-gray-400"></span>
+                                        {{ dispatch.status }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ dispatch.building_name }}</h2>
+                            <p class="mt-2 text-sm text-gray-500">
+                                Building ID:
+                                <span class="font-semibold text-gray-700">{{ dispatch.building_id|default:"Not provided" }}</span>
+                            </p>
+                        </div>
+                        <div class="lg:text-right">
+                            <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">Escalation Type</p>
+                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#46BD61] text-white font-bold shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="w-5 h-5"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                {{ dispatch.escalation_type }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-1 bg-[#46BD61]"></div>
+            </section>
+            <section class="bg-white rounded-2xl border border-green-100 shadow-sm overflow-hidden mb-6">
+                <div class="px-6 py-6 sm:px-8 border-b border-gray-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-11 h-11 rounded-xl bg-[#EAF8EE] flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="w-4 h-4 text-[#46BD61]"
+                                         class="w-6 h-6 text-[#46BD61]"
                                          fill="none"
                                          viewBox="0 0 24 24"
                                          stroke="currentColor"
-                                         stroke-width="2.5">
-
-                                        <path stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              d="M5 12h14"/>
-
-                                        <path stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              d="M13 6l6 6-6 6"/>
-
+                                         stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
                                     </svg>
-
-                                    <span class="text-sm font-bold text-[#35A850]">
-                                        {{ history.to_stage }}
-                                    </span>
-
                                 </div>
-
-                                <span class="text-xs text-gray-400">
-                                    {{ history.created_at }}
-                                </span>
-
-                            </div>
-
-                            <div class="mt-4 rounded-lg
-                                        bg-white
-                                        border border-gray-100
-                                        p-4">
-
-                                <p class="text-xs uppercase
-                                          tracking-wide
-                                          text-gray-400
-                                          font-semibold
-                                          mb-2">
-
-                                    Movement Comment
-
-                                </p>
-
-                                <p class="text-sm text-gray-700 whitespace-pre-line">
-                                    {{ history.comment }}
-                                </p>
-
-                            </div>
-
-                            <div class="mt-4 flex items-center gap-2">
-
-                                <div class="w-7 h-7 rounded-full
-                                            bg-[#46BD61]
-                                            text-white
-                                            flex items-center justify-center
-                                            text-xs font-bold">
-
-                                    {% if history.moved_by %}
-                                        {{ history.moved_by.username|slice:":1"|upper }}
-                                    {% else %}
-                                        S
-                                    {% endif %}
-
-                                </div>
-
                                 <div>
-
-                                    <p class="text-xs text-gray-400">
-                                        Moved by
-                                    </p>
-
-                                    {% if history.moved_by %}
-
-                                    <p class="text-sm font-semibold text-gray-700">
-                                        {% if history.moved_by.get_full_name %}
-                                            {{ history.moved_by.get_full_name }}
-                                        {% else %}
-                                            {{ history.moved_by.username }}
-                                        {% endif %}
-                                    </p>
-
-                                    {% else %}
-
-                                    <p class="text-sm font-semibold text-gray-700">
-                                        System
-                                    </p>
-
-                                    {% endif %}
-
+                                    <h3 class="font-bold text-gray-900 text-lg">Dispatch Workflow</h3>
+                                    <p class="text-xs text-gray-500 mt-1">Track the dispatch through each operational stage</p>
                                 </div>
-
                             </div>
-
                         </div>
-
+                        {% if is_on_hold %}
+                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-50 border border-yellow-100 text-yellow-700 text-sm font-bold">
+                                <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                                On Hold
+                            </span>
+                        {% elif is_dropped %}
+                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm font-bold">
+                                <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                                Dropped
+                            </span>
+                        {% else %}
+                            <div class="text-left sm:text-right">
+                                <p class="text-xs uppercase tracking-widest text-gray-400">Current Stage</p>
+                                <p class="mt-1 text-lg font-bold text-[#35A850]">{{ current_stage }}</p>
+                            </div>
+                        {% endif %}
                     </div>
-
-                    {% endfor %}
-
                 </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    {% else %}
-
-    <section class="bg-white rounded-2xl
-                    border border-gray-100
-                    shadow-sm overflow-hidden mb-6">
-
-        <div class="p-8 text-center">
-
-            <div class="mx-auto w-14 h-14 rounded-2xl
-                        bg-[#EAF8EE]
-                        flex items-center justify-center">
-
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="w-7 h-7 text-[#46BD61]"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
-                     stroke-width="2">
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M8 7h12M8 12h12M8 17h12"/>
-
-                </svg>
-
-            </div>
-
-            <h3 class="mt-4 font-bold text-gray-900">
-                No Stage Movements Yet
-            </h3>
-
-            <p class="mt-1 text-sm text-gray-500">
-                This dispatch is currently at
-                <span class="font-semibold text-[#35A850]">
-                    {{ current_stage }}
-                </span>.
-            </p>
-
-        </div>
-
-    </section>
-
-    {% endif %}
-
-    <section class="grid grid-cols-1
-                    sm:grid-cols-2
-                    lg:grid-cols-4
-                    gap-4 mb-6">
-
-        <div class="bg-white rounded-xl
-                    border border-gray-100
-                    p-5 shadow-sm
-                    hover:shadow-md
-                    hover:-translate-y-0.5
-                    transition-all duration-200">
-
-            <div class="flex items-start justify-between">
-
-                <div>
-
-                    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                        Ticket
-                    </p>
-
-                    <p class="mt-2 text-lg font-bold text-gray-900">
-                        {{ dispatch.ticket.name|default:"N/A" }}
-                    </p>
-
-                </div>
-
-                <div class="w-10 h-10 rounded-xl
-                            bg-[#EAF8EE]
-                            flex items-center justify-center">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         class="w-5 h-5 text-[#46BD61]"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="2">
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-
-                    </svg>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="bg-white rounded-xl
-                    border border-gray-100
-                    p-5 shadow-sm
-                    hover:shadow-md
-                    hover:-translate-y-0.5
-                    transition-all duration-200">
-
-            <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                Client
-            </p>
-
-            <p class="mt-2 text-lg font-bold text-gray-900 truncate">
-                {{ dispatch.client_name|default:"N/A" }}
-            </p>
-
-            <p class="text-xs text-gray-500 mt-1">
-                ID: {{ dispatch.client_id|default:"N/A" }}
-            </p>
-
-        </div>
-
-        <div class="bg-[#EAF8EE]
-                    rounded-xl
-                    border border-green-100
-                    p-5 shadow-sm
-                    hover:shadow-md
-                    hover:-translate-y-0.5
-                    transition-all duration-200">
-
-            <p class="text-xs uppercase tracking-wide text-gray-500 font-semibold">
-                Rollout Partner
-            </p>
-
-            <p class="mt-2 text-lg font-bold text-[#35A850]">
-                {{ dispatch.rp|default:"None" }}
-            </p>
-
-            <p class="text-xs text-gray-500 mt-1">
-                Assigned partner
-            </p>
-
-        </div>
-
-        <div class="{% if dispatch.is_expired %}
-                        bg-red-50 border-red-100
-                     {% else %}
-                        bg-white border-green-100
-                     {% endif %}
-                     rounded-xl border p-5 shadow-sm">
-
-            <div class="flex items-start justify-between">
-
-                <div>
-
-                    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                        SLA Status
-                    </p>
-
-                    {% if dispatch.is_expired %}
-
-                    <p class="mt-2 text-lg font-bold text-red-600">
-                        Expired
-                    </p>
-
+                <div class="p-6 sm:p-8">
+                    {% if is_on_hold %}
+                        <div class="rounded-2xl bg-yellow-50 border border-yellow-100 p-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-11 h-11 rounded-full bg-yellow-100 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-yellow-600 font-bold text-lg">!</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-yellow-800">Dispatch is currently on hold</h4>
+                                    <p class="text-sm text-yellow-700 mt-1">
+                                        This dispatch is temporarily paused and cannot be moved to the next workflow stage.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% elif is_dropped %}
+                        <div class="rounded-2xl bg-red-50 border border-red-100 p-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-11 h-11 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-red-600 font-bold text-lg">×</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-red-800">Dispatch has been dropped</h4>
+                                    <p class="text-sm text-red-700 mt-1">This dispatch is no longer progressing through the normal workflow.</p>
+                                </div>
+                            </div>
+                        </div>
                     {% else %}
-
-                    <p class="mt-2 text-lg font-bold text-[#35A850]">
-                        Active
-                    </p>
-
+                        <div class="mb-8">
+                            <div class="flex items-center justify-between text-sm mb-2">
+                                <span class="font-semibold text-gray-600">Workflow Progress</span>
+                                <span class="font-bold text-[#35A850]">{{ current_stage_index|add:"1" }} / {{ stages|length }}</span>
+                            </div>
+                            <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                {% widthratio current_stage_index stages|length 100 as progress %}
+                                <div class="h-full bg-[#46BD61] rounded-full transition-all duration-500"
+                                     style="width: {{ progress }}%"></div>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto pb-3">
+                            <div class="min-w-[850px]">
+                                <div class="flex items-start">
+                                    {% for stage in stages %}
+                                        <div class="flex-1 relative">
+                                            {% if not forloop.last %}
+                                                <div class="absolute top-5 left-1/2 right-0 h-0.5 {% if current_stage_index > forloop.counter0 %} bg-[#46BD61] {% else %} bg-gray-200 {% endif %}">
+                                                </div>
+                                            {% endif %}
+                                            <div class="relative flex flex-col items-center">
+                                                {% if forloop.counter0 < current_stage_index %}
+                                                    <div class="w-10 h-10 rounded-full bg-[#46BD61] text-white flex items-center justify-center font-bold border-4 border-white shadow-md z-10">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                             class="w-5 h-5"
+                                                             fill="none"
+                                                             viewBox="0 0 24 24"
+                                                             stroke="currentColor"
+                                                             stroke-width="3">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                    </div>
+                                                {% elif forloop.counter0 == current_stage_index %}
+                                                    <div class="w-10 h-10 rounded-full bg-white border-4 border-[#46BD61] text-[#35A850] flex items-center justify-center font-bold shadow-md z-10">
+                                                        <span class="w-3 h-3 rounded-full bg-[#46BD61]"></span>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="w-10 h-10 rounded-full bg-gray-100 border-4 border-white text-gray-400 flex items-center justify-center font-bold shadow z-10">
+                                                        <span class="text-sm">{{ forloop.counter }}</span>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="mt-3 text-center px-2">
+                                                    <p class="text-sm font-semibold {% if forloop.counter0 <= current_stage_index %} text-gray-900 {% else %} text-gray-400 {% endif %}">
+                                                        {{ stage }}
+                                                    </p>
+                                                    {% if forloop.counter0 < current_stage_index %}
+                                                        <p class="text-xs text-[#46BD61] mt-1 font-medium">Completed</p>
+                                                    {% elif forloop.counter0 == current_stage_index %}
+                                                        <p class="text-xs text-[#35A850] mt-1 font-bold">Current</p>
+                                                    {% else %}
+                                                        <p class="text-xs text-gray-400 mt-1">Upcoming</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if can_move_next %}
+                            <div class="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl bg-[#F5F9F6] border border-green-100 p-5">
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-900">Ready for the next stage?</p>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Current stage:
+                                        <span class="font-semibold text-gray-700">{{ current_stage }}</span>
+                                        <span class="mx-1">→</span>
+                                        <span class="font-semibold text-[#35A850]">{{ next_stage }}</span>
+                                    </p>
+                                </div>
+                                {% if request.user.role == "ROLLOUT_PARTNER" %}
+                                    <button type="button"
+                                            onclick="openStageModal()"
+                                            class="inline-flex items-center justify-center gap-2 bg-[#46BD61] hover:bg-[#35A850] text-white px-5 py-3 rounded-xl font-bold text-sm shadow-sm hover:shadow-md transition-all duration-200">
+                                        Move to {{ next_stage }}
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="w-5 h-5"
+                                             fill="none"
+                                             viewBox="0 0 24 24"
+                                             stroke="currentColor"
+                                             stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 6l6 6-6 6" />
+                                        </svg>
+                                    </button>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="mt-8 rounded-2xl bg-[#EAF8EE] border border-green-100 p-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-[#46BD61] text-white flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="w-5 h-5"
+                                             fill="none"
+                                             viewBox="0 0 24 24"
+                                             stroke="currentColor"
+                                             stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-[#35A850]">Final Workflow Stage</p>
+                                        <p class="text-sm text-gray-600 mt-1">This dispatch has reached {{ current_stage }}.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endif %}
-
                 </div>
-
-                {% if dispatch.is_expired %}
-
-                <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
-                    <span class="text-red-600 font-bold">!</span>
-                </div>
-
-                {% else %}
-
-                <div class="w-10 h-10 rounded-xl bg-[#EAF8EE] flex items-center justify-center">
-                    <span class="text-[#46BD61] font-bold">✓</span>
-                </div>
-
-                {% endif %}
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <section class="lg:col-span-2 space-y-6">
-
-            <div class="bg-white rounded-2xl
-                        border border-gray-100
-                        shadow-sm overflow-hidden">
-
-                <div class="px-6 py-5 border-b border-gray-100">
-
-                    <div class="flex items-center gap-3">
-
-                        <div class="w-10 h-10 rounded-xl
-                                    bg-[#EAF8EE]
-                                    flex items-center justify-center">
-
+            </section>
+            {% if stage_history %}
+                <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-6">
+                    <div class="px-6 py-5 border-b border-gray-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-[#EAF8EE] flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="w-5 h-5 text-[#46BD61]"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12M8 12h12M8 17h12" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h.01M4 12h.01M4 17h.01" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-900">Stage Movement History</h3>
+                                <p class="text-xs text-gray-500 mt-1">Recorded comments and workflow transitions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-8">
+                        <div class="relative ml-2 sm:ml-4">
+                            <div class="absolute left-4 top-2 bottom-2 w-0.5 bg-green-100"></div>
+                            <div class="space-y-7">
+                                {% for history in stage_history %}
+                                    <div class="relative pl-12">
+                                        <div class="absolute left-0 top-1 w-9 h-9 rounded-full bg-[#EAF8EE] border-4 border-white shadow flex items-center justify-center z-10">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 class="w-4 h-4 text-[#46BD61]"
+                                                 fill="none"
+                                                 viewBox="0 0 24 24"
+                                                 stroke="currentColor"
+                                                 stroke-width="2.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 6l6 6-6 6" />
+                                            </svg>
+                                        </div>
+                                        <div class="rounded-xl border border-gray-100 bg-[#F9FCFA] p-5">
+                                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                                <div class="flex flex-wrap items-center gap-2">
+                                                    <span class="text-sm font-bold text-gray-900">{{ history.from_stage }}</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         class="w-4 h-4 text-[#46BD61]"
+                                                         fill="none"
+                                                         viewBox="0 0 24 24"
+                                                         stroke="currentColor"
+                                                         stroke-width="2.5">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 6l6 6-6 6" />
+                                                    </svg>
+                                                    <span class="text-sm font-bold text-[#35A850]">{{ history.to_stage }}</span>
+                                                </div>
+                                                <div class="flex flex-col sm:items-end gap-1">
+                                                    <span class="text-xs text-gray-400">{{ history.created_at }}</span>
+                                                    {% if history.started_at and history.completed_at %}
+                                                        <span class="inline-flex items-center gap-1 text-xs font-semibold text-[#35A850]">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-3.5 h-3.5"
+                                                                fill="none"
+                                                                viewBox="0 0 24 24"
+                                                                stroke="currentColor"
+                                                                stroke-width="2">
+                                                                <circle cx="12" cy="12" r="9" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 7v5l3 2" />
+                                                            </svg>
+                                                            {% if history.duration_seconds %}
+                                                                {% widthratio history.duration_seconds 86400 1 %}d
+                                                                {% widthratio history.duration_seconds 3600 1 %}h
+                                                                {% widthratio history.duration_seconds 60 1 %}m
+                                                            {% endif %}
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 rounded-lg bg-white border border-gray-100 p-4">
+                                                <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-2">Movement Comment</p>
+                                                <p class="text-sm text-gray-700 whitespace-pre-line">{{ history.comment }}</p>
+                                            </div>
+                                            {% if history.attachment %}
+                                                <div class="mt-4">
+                                                    <a href="{{ history.attachment.url }}"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="inline-flex items-center gap-2 text-sm font-semibold text-[#46BD61] hover:text-[#35A850] hover:underline">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-4 h-4"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                            stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.586-6.586a4 4 0 00-5.656-5.656l-6.586 6.586a6 6 0 108.485 8.485L20 13" />
+                                                        </svg>
+                                                        View Attachment
+                                                    </a>
+                                                </div>
+                                            {% endif %}
+                                            <div class="mt-4 flex items-center gap-2">
+                                                <div class="w-7 h-7 rounded-full bg-[#46BD61] text-white flex items-center justify-center text-xs font-bold">
+                                                    {% if history.moved_by %}
+                                                        {{ history.moved_by.username|slice:":1"|upper }}
+                                                    {% else %}
+                                                        S
+                                                    {% endif %}
+                                                </div>
+                                                <div>
+                                                    <p class="text-xs text-gray-400">Moved by</p>
+                                                    {% if history.moved_by %}
+                                                        <p class="text-sm font-semibold text-gray-700">
+                                                            {% if history.moved_by.get_full_name %}
+                                                                {{ history.moved_by.get_full_name }}
+                                                            {% else %}
+                                                                {{ history.moved_by.username }}
+                                                            {% endif %}
+                                                        </p>
+                                                    {% else %}
+                                                        <p class="text-sm font-semibold text-gray-700">System</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% else %}
+                <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-6">
+                    <div class="p-8 text-center">
+                        <div class="mx-auto w-14 h-14 rounded-2xl bg-[#EAF8EE] flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="w-7 h-7 text-[#46BD61]"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12M8 12h12M8 17h12" />
+                            </svg>
+                        </div>
+                        <h3 class="mt-4 font-bold text-gray-900">No Stage Movements Yet</h3>
+                        <p class="mt-1 text-sm text-gray-500">
+                            This dispatch is currently at
+                            <span class="font-semibold text-[#35A850]">{{ current_stage }} </span>.
+                        </p>
+                    </div>
+                </section>
+            {% endif %}
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">Ticket</p>
+                            <p class="mt-2 text-lg font-bold text-gray-900">{{ dispatch.ticket.name|default:"N/A" }}</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-[#EAF8EE] flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                  class="w-5 h-5 text-[#46BD61]"
                                  fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor"
                                  stroke-width="2">
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-
                         </div>
-
-                        <div>
-
-                            <h3 class="font-bold text-gray-900">
-                                Assignment
-                            </h3>
-
-                            <p class="text-xs text-gray-500">
-                                Parties associated with this dispatch
-                            </p>
-
-                        </div>
-
                     </div>
-
                 </div>
-
-                <div class="p-6">
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-
-                        <div class="rounded-xl bg-gray-50 border border-gray-100 p-4">
-
-                            <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                                MSP
-                            </p>
-
-                            <p class="mt-2 font-bold text-gray-900">
-                                {{ dispatch.msp|default:"None" }}
-                            </p>
-
+                <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">Client</p>
+                    <p class="mt-2 text-lg font-bold text-gray-900 truncate">{{ dispatch.client_name|default:"N/A" }}</p>
+                    <p class="text-xs text-gray-500 mt-1">ID: {{ dispatch.client_id|default:"N/A" }}</p>
+                </div>
+                <div class="bg-[#EAF8EE] rounded-xl border border-green-100 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                    <p class="text-xs uppercase tracking-wide text-gray-500 font-semibold">Rollout Partner</p>
+                    <p class="mt-2 text-lg font-bold text-[#35A850]">{{ dispatch.rp|default:"None" }}</p>
+                    <p class="text-xs text-gray-500 mt-1">Assigned partner</p>
+                </div>
+                <div class="{% if dispatch.is_expired %} bg-red-50 border-red-100 {% else %} bg-white border-green-100 {% endif %} rounded-xl border p-5 shadow-sm">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">SLA Status</p>
+                            {% if dispatch.is_expired %}
+                                <p class="mt-2 text-lg font-bold text-red-600">Expired</p>
+                            {% else %}
+                                <p class="mt-2 text-lg font-bold text-[#35A850]">Active</p>
+                            {% endif %}
                         </div>
-
-                        <div class="rounded-xl bg-gray-50 border border-gray-100 p-4">
-
-                            <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                                FDP
-                            </p>
-
-                            <p class="mt-2 font-bold text-gray-900">
-                                {{ dispatch.fdp|default:"None" }}
-                            </p>
-
-                        </div>
-
-                        <div class="rounded-xl bg-[#EAF8EE] border border-green-100 p-4">
-
-                            <p class="text-xs uppercase tracking-wide text-gray-500 font-semibold">
-                                Rollout Partner
-                            </p>
-
-                            <p class="mt-2 font-bold text-[#35A850]">
-                                {{ dispatch.rp|default:"None" }}
-                            </p>
-
-                        </div>
-
+                        {% if dispatch.is_expired %}
+                            <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
+                                <span class="text-red-600 font-bold">!</span>
+                            </div>
+                        {% else %}
+                            <div class="w-10 h-10 rounded-xl bg-[#EAF8EE] flex items-center justify-center">
+                                <span class="text-[#46BD61] font-bold">✓</span>
+                            </div>
+                        {% endif %}
                     </div>
-
                 </div>
-
-            </div>
-
-            <div class="bg-white rounded-2xl
-                        border border-gray-100
-                        shadow-sm overflow-hidden">
-
-                <div class="px-6 py-5 border-b border-gray-100">
-
-                    <div class="flex items-center gap-3">
-
-                        <div class="w-10 h-10 rounded-xl
-                                    bg-[#46BD61]
-                                    flex items-center justify-center">
-
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="w-5 h-5 text-white"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M17.657 16.657L13.414 21a2 2 0 01-2.828 0l-4.243-4.343a8 8 0 1111.314 0z"/>
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-
-                            </svg>
-
-                        </div>
-
-                        <div>
-
-                            <h3 class="font-bold text-gray-900">
-                                Client & Location
-                            </h3>
-
-                            <p class="text-xs text-gray-500">
-                                Site and customer information
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="p-6">
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
-                        <div>
-                            <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                                Client Name
-                            </p>
-
-                            <p class="mt-2 font-semibold text-gray-900">
-                                {{ dispatch.client_name|default:"Not provided" }}
-                            </p>
-                        </div>
-
-                        <div>
-                            <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                                Client ID
-                            </p>
-
-                            <p class="mt-2 font-semibold text-gray-900">
-                                {{ dispatch.client_id|default:"Not provided" }}
-                            </p>
-                        </div>
-
-                        <div>
-                            <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                                Building Name
-                            </p>
-
-                            <p class="mt-2 font-semibold text-gray-900">
-                                {{ dispatch.building_name }}
-                            </p>
-                        </div>
-
-                        <div>
-                            <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                                Building ID
-                            </p>
-
-                            <p class="mt-2 font-semibold text-gray-900">
-                                {{ dispatch.building_id|default:"Not provided" }}
-                            </p>
-                        </div>
-
-                        <div class="sm:col-span-2">
-
-                            <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                                Coordinates
-                            </p>
-
-                            <div class="mt-2 flex items-center gap-3
-                                        bg-[#F5F9F6]
-                                        border border-green-50
-                                        rounded-xl p-4">
-
-                                <div class="w-9 h-9 rounded-lg
-                                            bg-[#EAF8EE]
-                                            flex items-center justify-center">
-
+            </section>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <section class="lg:col-span-2 space-y-6">
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <div class="px-6 py-5 border-b border-gray-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-[#EAF8EE] flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="w-5 h-5 text-[#46BD61]"
                                          fill="none"
                                          viewBox="0 0 24 24"
                                          stroke="currentColor"
                                          stroke-width="2">
-
-                                        <path stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              d="M12 21s8-4.5 8-11a8 8 0 10-16 0c0 6.5 8 11 8 11z"/>
-
-                                        <circle cx="12" cy="10" r="2.5"/>
-
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
-
                                 </div>
-
-                                <span class="font-medium text-gray-700">
-                                    {{ dispatch.coordinates|default:"Not provided" }}
-                                </span>
-
+                                <div>
+                                    <h3 class="font-bold text-gray-900">Assignment</h3>
+                                    <p class="text-xs text-gray-500">Parties associated with this dispatch</p>
+                                </div>
                             </div>
-
                         </div>
-
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="rounded-xl bg-gray-50 border border-gray-100 p-4">
+                                    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">MSP</p>
+                                    <p class="mt-2 font-bold text-gray-900">{{ dispatch.msp|default:"None" }}</p>
+                                </div>
+                                <div class="rounded-xl bg-gray-50 border border-gray-100 p-4">
+                                    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">FDP</p>
+                                    <p class="mt-2 font-bold text-gray-900">{{ dispatch.fdp|default:"None" }}</p>
+                                </div>
+                                <div class="rounded-xl bg-[#EAF8EE] border border-green-100 p-4">
+                                    <p class="text-xs uppercase tracking-wide text-gray-500 font-semibold">Rollout Partner</p>
+                                    <p class="mt-2 font-bold text-[#35A850]">{{ dispatch.rp|default:"None" }}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                </div>
-
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <div class="px-6 py-5 border-b border-gray-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-[#46BD61] flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="w-5 h-5 text-white"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor"
+                                         stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 21a2 2 0 01-2.828 0l-4.243-4.343a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-900">Client & Location</h3>
+                                    <p class="text-xs text-gray-500">Site and customer information</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">Client Name</p>
+                                    <p class="mt-2 font-semibold text-gray-900">{{ dispatch.client_name|default:"Not provided" }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">Client ID</p>
+                                    <p class="mt-2 font-semibold text-gray-900">{{ dispatch.client_id|default:"Not provided" }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">Building Name</p>
+                                    <p class="mt-2 font-semibold text-gray-900">{{ dispatch.building_name }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">Building ID</p>
+                                    <p class="mt-2 font-semibold text-gray-900">{{ dispatch.building_id|default:"Not provided" }}</p>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">Coordinates</p>
+                                    <div class="mt-2 flex items-center gap-3 bg-[#F5F9F6] border border-green-50 rounded-xl p-4">
+                                        <div class="w-9 h-9 rounded-lg bg-[#EAF8EE] flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 class="w-5 h-5 text-[#46BD61]"
+                                                 fill="none"
+                                                 viewBox="0 0 24 24"
+                                                 stroke="currentColor"
+                                                 stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s8-4.5 8-11a8 8 0 10-16 0c0 6.5 8 11 8 11z" />
+                                                <circle cx="12" cy="10" r="2.5" />
+                                            </svg>
+                                        </div>
+                                        <span class="font-medium text-gray-700">{{ dispatch.coordinates|default:"Not provided" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- =====================================================
+                 COMMENT / UPDATE
+            ====================================================== -->
+                    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <div class="px-5 py-4 bg-[#F5F9F6] border-b border-gray-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-[#EAF8EE] flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="w-5 h-5 text-[#46BD61]"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor"
+                                         stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8M8 14h5" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-900">Comment on A Dispatch Stage</h3>
+                                    <p class="text-xs text-gray-500 mt-1">Add a progress comment</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <form method="post"
+                                action="{% url 'rp_dispatch_detail' dispatch.pk %}"
+                                enctype="multipart/form-data"
+                                class="space-y-4">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="comment_only">
+                                <!-- DISPATCH STAGE -->
+                                <div>
+                                    <label for="stage" class="block mb-2 text-sm font-semibold text-gray-700">Dispatch Stage</label>
+                                    <select name="stage"
+                                            id="stage"
+                                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#46BD61] focus:border-[#46BD61]">
+                                        {% for stage in stages %}
+                                            <option value="{{ stage }}"
+                                                    {% if stage == current_stage %}selected{% endif %}>{{ stage }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <!-- COMMENT -->
+                                <div>
+                                    <label for="comment-textarea"
+                                        class="block mb-2 text-sm font-semibold text-gray-700">Comment</label>
+                                    <textarea name="stage_comment"
+                                            id="comment-textarea"
+                                            required
+                                            placeholder="Enter your progress comment..."
+                                            class="w-full min-h-[110px] rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#46BD61] focus:border-[#46BD61] resize-y"></textarea>
+                                </div>
+                                <!-- OPTIONAL ATTACHMENT -->
+                                <div>
+                                    <label class="block mb-2 text-sm font-semibold text-gray-700">
+                                        Attachment
+                                        <span class="text-xs font-normal text-gray-400">(Optional)</span>
+                                    </label>
+                                    <label for="stage-comment-file-upload"
+                                        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-700 font-semibold text-sm cursor-pointer hover:bg-gray-50 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5 text-[#46BD61]"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.586-6.586a4 4 0 00-5.656-5.656l-6.586 6.586a6 6 0 108.485 8.485L20 13" />
+                                        </svg>
+                                        Attach File
+                                        <input type="file"
+                                            id="stage-comment-file-upload"
+                                            name="attachment"
+                                            class="hidden">
+                                    </label>
+                                    <p class="text-xs text-gray-400 mt-2">You can optionally attach a file.</p>
+                                </div>
+                                <!-- SUBMIT -->
+                                <div class="space-y-3">
+                                    <button type="submit"
+                                            title="Comment on Dispatch"
+                                            class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#46BD61] hover:bg-[#35A850] text-white font-bold text-sm shadow-sm hover:shadow-md transition">
+                                        Comment Stage
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-4 h-4"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 6l6 6-6 6" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <div class="px-6 py-5 border-b border-gray-100">
+                            <h3 class="font-bold text-gray-900">Stage Comments</h3>
+                            <p class="text-xs text-gray-500 mt-1">Comments and updates submitted for this dispatch</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead class="bg-[#F5F9F6]">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-xs uppercase tracking-wide font-bold text-gray-500">Stage</th>
+                                        <th class="px-6 py-4 text-left text-xs uppercase tracking-wide font-bold text-gray-500">Comment</th>
+                                        <th class="px-6 py-4 text-left text-xs uppercase tracking-wide font-bold text-gray-500 whitespace-nowrap">Date</th>
+                                        <th class="px-6 py-4 text-left text-xs uppercase tracking-wide font-bold text-gray-500">Submitted By</th>
+                                        <th class="px-6 py-4 text-left text-xs uppercase tracking-wide font-bold text-gray-500 whitespace-nowrap">
+                                            Attachment
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    {% for comment in stage_comments %}
+                                        <tr class="hover:bg-[#F9FCFA] transition">
+                                            <!-- Stage -->
+                                            <td class="px-6 py-4">
+                                                <span class="inline-flex px-2.5 py-1 rounded-full bg-[#EAF8EE] text-[#35A850] text-xs font-semibold">
+                                                    {{ comment.stage_history.from_stage }}
+                                                </span>
+                                            </td>
+                                            <!-- Comment -->
+                                            <td class="px-6 py-4">
+                                                <p class="text-sm text-gray-700 whitespace-pre-line">{{ comment.comment }}</p>
+                                            </td>
+                                            <!-- Date -->
+                                            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{ comment.created_at }}</td>
+                                            <!-- Submitted By -->
+                                            <td class="px-6 py-4">
+                                                <div class="flex items-center gap-2">
+                                                    <div class="w-8 h-8 rounded-full bg-[#46BD61] text-white flex items-center justify-center text-xs font-bold">
+                                                        {{ comment.commented_by.username|slice:":1"|upper }}
+                                                    </div>
+                                                    <span class="text-sm font-semibold text-gray-700">{{ comment.commented_by.username }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {% if comment.attachment %}
+                                                    <a href="{{ comment.attachment.url }}"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="inline-flex items-center gap-2 text-sm font-semibold text-[#46BD61] hover:text-[#35A850] hover:underline">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-4 h-4"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                            stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.586-6.586a4 4 0 00-5.656-5.656l-6.586 6.586a6 6 0 108.485 8.485L20 13" />
+                                                        </svg>
+                                                        View Attachment
+                                                    </a>
+                                                {% else %}
+                                                    <span class="text-sm text-gray-400">No attachment</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="px-6 py-12 text-center">
+                                                <div class="mx-auto w-12 h-12 rounded-xl bg-[#EAF8EE] flex items-center justify-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         class="w-6 h-6 text-[#46BD61]"
+                                                         fill="none"
+                                                         viewBox="0 0 24 24"
+                                                         stroke="currentColor"
+                                                         stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8M8 14h5" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </div>
+                                                <p class="mt-3 font-semibold text-gray-900">No Stage Comments</p>
+                                                <p class="text-sm text-gray-500 mt-1">No comments have been submitted yet.</p>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <div class="px-6 py-5 border-b border-gray-100">
+                            <h3 class="font-bold text-gray-900">Dispatch Timeline</h3>
+                            <p class="text-xs text-gray-500 mt-1">Important dispatch events</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="relative border-l-2 border-green-100 ml-3 space-y-8">
+                                <div class="relative pl-8">
+                                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#46BD61] border-4 border-white shadow"></div>
+                                    <p class="text-sm font-bold text-gray-900">Dispatch Created</p>
+                                    <p class="text-sm text-gray-500 mt-1">{{ dispatch.created_at }}</p>
+                                </div>
+                                <div class="relative pl-8">
+                                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#46BD61] border-4 border-white shadow"></div>
+                                    <p class="text-sm font-bold text-gray-900">Last Updated</p>
+                                    <p class="text-sm text-gray-500 mt-1">{{ dispatch.updated_at }}</p>
+                                </div>
+                                {% if dispatch.closed_at %}
+                                    <div class="relative pl-8">
+                                        <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-green-500 border-4 border-white shadow"></div>
+                                        <p class="text-sm font-bold text-gray-900">Dispatch Closed</p>
+                                        <p class="text-sm text-gray-500 mt-1">{{ dispatch.closed_at }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <aside class="space-y-6">
+                    <div class="bg-white rounded-2xl border border-green-100 shadow-sm overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-gray-400">Service Level</p>
+                                    <h3 class="text-xl font-bold text-gray-900 mt-1">SLA</h3>
+                                </div>
+                                <div class="w-11 h-11 rounded-xl bg-[#EAF8EE] flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="w-6 h-6 text-[#46BD61]"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor"
+                                         stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="rounded-xl bg-[#F5F9F6] border border-green-50 p-5 mb-5">
+                                <p class="text-xs uppercase tracking-wide text-gray-400">SLA Deadline</p>
+                                <p class="mt-2 text-lg font-bold text-gray-900">{{ dispatch.sla_timer|default:"Not set" }}</p>
+                            </div>
+                            {% if dispatch.is_expired %}
+                                <div class="rounded-xl bg-red-50 border border-red-100 p-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                                            <span class="text-red-600 font-bold">!</span>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-red-600">SLA Breached</p>
+                                            <p class="text-xs text-gray-500 mt-1">{{ dispatch.expired_at|default:"N/A" }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="rounded-xl bg-[#EAF8EE] border border-green-100 p-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-[#46BD61] flex items-center justify-center">
+                                            <span class="text-white font-bold">✓</span>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-[#35A850]">SLA Active</p>
+                                            <p class="text-xs text-gray-500 mt-1">Within SLA window</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="h-1 bg-[#46BD61]"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <div class="px-5 py-4 bg-[#F5F9F6] border-b border-gray-100">
+                            <h3 class="font-bold text-gray-900">Current Assignment</h3>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center gap-3">
+                                <div class="w-11 h-11 rounded-full bg-[#46BD61] text-white flex items-center justify-center font-bold">RP</div>
+                                <div>
+                                    <p class="text-xs text-gray-400">Rollout Partner</p>
+                                    <p class="font-bold text-gray-900">{{ dispatch.rp|default:"None" }}</p>
+                                </div>
+                            </div>
+                            <div class="mt-5 pt-5 border-t border-gray-100">
+                                <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">Reassigned To</p>
+                                <p class="mt-2 font-semibold text-gray-900">{{ dispatch.reassign_to|default:"None" }}</p>
+                            </div>
+                            <div class="mt-5 pt-5 border-t border-gray-100">
+                                <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">Enterprise Connectivity</p>
+                                <p class="mt-2 font-semibold text-gray-900">{{ dispatch.ec|default:"N/A" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                        <h3 class="font-bold text-gray-900 mb-5">Dispatch Information</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between gap-4">
+                                <span class="text-sm text-gray-500">Dispatch ID</span>
+                                <span class="text-sm font-bold text-gray-900">#{{ dispatch.id }}</span>
+                            </div>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-sm text-gray-500">Status</span>
+                                <span class="text-sm font-semibold text-gray-900">{{ dispatch.status }}</span>
+                            </div>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-sm text-gray-500">Stage</span>
+                                <span class="text-sm font-semibold text-[#35A850]">{{ dispatch.stage }}</span>
+                            </div>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-sm text-gray-500">Escalation</span>
+                                <span class="text-sm font-semibold text-gray-900">{{ dispatch.escalation_type }}</span>
+                            </div>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-sm text-gray-500">Created</span>
+                                <span class="text-sm font-medium text-gray-600 text-right">{{ dispatch.created_at }}</span>
+                            </div>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-sm text-gray-500">Updated</span>
+                                <span class="text-sm font-medium text-gray-600 text-right">{{ dispatch.updated_at }}</span>
+                            </div>
+                            {% if dispatch.closed_at %}
+                                <div class="flex justify-between gap-4">
+                                    <span class="text-sm text-gray-500">Closed</span>
+                                    <span class="text-sm font-medium text-gray-600 text-right">{{ dispatch.closed_at }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </aside>
             </div>
-
-            <div class="bg-white rounded-2xl
-                        border border-gray-100
-                        shadow-sm overflow-hidden">
-
-                <div class="px-6 py-5 border-b border-gray-100">
-
-                    <h3 class="font-bold text-gray-900">
-                        Dispatch Timeline
-                    </h3>
-
-                    <p class="text-xs text-gray-500 mt-1">
-                        Important dispatch events
-                    </p>
-
-                </div>
-
-                <div class="p-6">
-
-                    <div class="relative border-l-2 border-green-100 ml-3 space-y-8">
-
-                        <div class="relative pl-8">
-
-                            <div class="absolute -left-[9px] top-0
-                                        w-4 h-4 rounded-full
-                                        bg-[#46BD61]
-                                        border-4 border-white
-                                        shadow">
-                            </div>
-
-                            <p class="text-sm font-bold text-gray-900">
-                                Dispatch Created
-                            </p>
-
-                            <p class="text-sm text-gray-500 mt-1">
-                                {{ dispatch.created_at }}
-                            </p>
-
+            {% if image %}
+                <section class="mt-6 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="px-6 py-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-gray-900">Dispatch Attachment</h3>
+                            <p class="text-xs text-gray-500 mt-1">Supporting dispatch documentation</p>
                         </div>
-
-                        <div class="relative pl-8">
-
-                            <div class="absolute -left-[9px] top-0
-                                        w-4 h-4 rounded-full
-                                        bg-[#46BD61]
-                                        border-4 border-white
-                                        shadow">
-                            </div>
-
-                            <p class="text-sm font-bold text-gray-900">
-                                Last Updated
-                            </p>
-
-                            <p class="text-sm text-gray-500 mt-1">
-                                {{ dispatch.updated_at }}
-                            </p>
-
-                        </div>
-
-                        {% if dispatch.closed_at %}
-
-                        <div class="relative pl-8">
-
-                            <div class="absolute -left-[9px] top-0
-                                        w-4 h-4 rounded-full
-                                        bg-green-500
-                                        border-4 border-white
-                                        shadow">
-                            </div>
-
-                            <p class="text-sm font-bold text-gray-900">
-                                Dispatch Closed
-                            </p>
-
-                            <p class="text-sm text-gray-500 mt-1">
-                                {{ dispatch.closed_at }}
-                            </p>
-
-                        </div>
-
+                        {% if is_img_pdf %}
+                            <a href="{{ image.image.url }}"
+                               target="_blank"
+                               class="inline-flex items-center justify-center gap-2 bg-[#46BD61] hover:bg-[#35A850] text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-sm transition">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="w-4 h-4"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                                Open PDF
+                            </a>
                         {% endif %}
-
                     </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <aside class="space-y-6">
-
-            <div class="bg-white rounded-2xl
-                        border border-green-100
-                        shadow-sm overflow-hidden">
-
-                <div class="p-6">
-
-                    <div class="flex items-center justify-between mb-6">
-
-                        <div>
-
-                            <p class="text-xs uppercase tracking-widest text-gray-400">
-                                Service Level
-                            </p>
-
-                            <h3 class="text-xl font-bold text-gray-900 mt-1">
-                                SLA
-                            </h3>
-
-                        </div>
-
-                        <div class="w-11 h-11 rounded-xl
-                                    bg-[#EAF8EE]
-                                    flex items-center justify-center">
-
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="w-6 h-6 text-[#46BD61]"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor"
-                                 stroke-width="2">
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-
-                            </svg>
-
-                        </div>
-
-                    </div>
-
-                    <div class="rounded-xl
-                                bg-[#F5F9F6]
-                                border border-green-50
-                                p-5 mb-5">
-
-                        <p class="text-xs uppercase tracking-wide text-gray-400">
-                            SLA Deadline
-                        </p>
-
-                        <p class="mt-2 text-lg font-bold text-gray-900">
-                            {{ dispatch.sla_timer|default:"Not set" }}
-                        </p>
-
-                    </div>
-
-                    {% if dispatch.is_expired %}
-
-                    <div class="rounded-xl bg-red-50 border border-red-100 p-4">
-
-                        <div class="flex items-center gap-3">
-
-                            <div class="w-10 h-10 rounded-full
-                                        bg-red-100
-                                        flex items-center justify-center">
-
-                                <span class="text-red-600 font-bold">
-                                    !
-                                </span>
-
+                    <div class="p-6">
+                        {% if is_img_pdf %}
+                            <div class="rounded-xl bg-[#F5F9F6] border border-green-50 p-10 text-center">
+                                <div class="mx-auto w-16 h-16 rounded-2xl bg-red-50 flex items-center justify-center">
+                                    <span class="text-red-500 font-bold text-sm">PDF</span>
+                                </div>
+                                <p class="mt-4 font-semibold text-gray-900">Dispatch PDF Attachment</p>
+                                <p class="text-sm text-gray-500 mt-1">Open the document to view the attachment.</p>
                             </div>
-
-                            <div>
-
-                                <p class="font-bold text-red-600">
-                                    SLA Breached
-                                </p>
-
-                                <p class="text-xs text-gray-500 mt-1">
-                                    {{ dispatch.expired_at|default:"N/A" }}
-                                </p>
-
+                        {% else %}
+                            <div class="flex justify-center">
+                                <img src="{{ image.image.url }}"
+                                     alt="Dispatch Image"
+                                     class="max-w-full max-h-[600px] object-contain rounded-xl shadow-md">
                             </div>
-
-                        </div>
-
+                        {% endif %}
                     </div>
-
-                    {% else %}
-
-                    <div class="rounded-xl
-                                bg-[#EAF8EE]
-                                border border-green-100
-                                p-4">
-
-                        <div class="flex items-center gap-3">
-
-                            <div class="w-10 h-10 rounded-full
-                                        bg-[#46BD61]
-                                        flex items-center justify-center">
-
-                                <span class="text-white font-bold">
-                                    ✓
-                                </span>
-
-                            </div>
-
-                            <div>
-
-                                <p class="font-bold text-[#35A850]">
-                                    SLA Active
-                                </p>
-
-                                <p class="text-xs text-gray-500 mt-1">
-                                    Within SLA window
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    {% endif %}
-
-                </div>
-
-                <div class="h-1 bg-[#46BD61]"></div>
-
-            </div>
-
-            <div class="bg-white rounded-2xl
-                        border border-gray-100
-                        shadow-sm overflow-hidden">
-
-                <div class="px-5 py-4
-                            bg-[#F5F9F6]
-                            border-b border-gray-100">
-
-                    <h3 class="font-bold text-gray-900">
-                        Current Assignment
-                    </h3>
-
-                </div>
-
-                <div class="p-5">
-
-                    <div class="flex items-center gap-3">
-
-                        <div class="w-11 h-11 rounded-full
-                                    bg-[#46BD61]
-                                    text-white
-                                    flex items-center justify-center
-                                    font-bold">
-
-                            RP
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-xs text-gray-400">
-                                Rollout Partner
-                            </p>
-
-                            <p class="font-bold text-gray-900">
-                                {{ dispatch.rp|default:"None" }}
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <div class="mt-5 pt-5 border-t border-gray-100">
-
-                        <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                            Reassigned To
-                        </p>
-
-                        <p class="mt-2 font-semibold text-gray-900">
-                            {{ dispatch.reassign_to|default:"None" }}
-                        </p>
-
-                    </div>
-
-                    <div class="mt-5 pt-5 border-t border-gray-100">
-
-                        <p class="text-xs uppercase tracking-wide text-gray-400 font-semibold">
-                            Enterprise Connectivity
-                        </p>
-
-                        <p class="mt-2 font-semibold text-gray-900">
-                            {{ dispatch.ec|default:"N/A" }}
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="bg-white rounded-2xl
-                        border border-gray-100
-                        shadow-sm p-5">
-
-                <h3 class="font-bold text-gray-900 mb-5">
-                    Dispatch Information
-                </h3>
-
-                <div class="space-y-4">
-
-                    <div class="flex justify-between gap-4">
-
-                        <span class="text-sm text-gray-500">
-                            Dispatch ID
-                        </span>
-
-                        <span class="text-sm font-bold text-gray-900">
-                            #{{ dispatch.id }}
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between gap-4">
-
-                        <span class="text-sm text-gray-500">
-                            Status
-                        </span>
-
-                        <span class="text-sm font-semibold text-gray-900">
-                            {{ dispatch.status }}
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between gap-4">
-
-                        <span class="text-sm text-gray-500">
-                            Stage
-                        </span>
-
-                        <span class="text-sm font-semibold text-[#35A850]">
-                            {{ dispatch.stage }}
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between gap-4">
-
-                        <span class="text-sm text-gray-500">
-                            Escalation
-                        </span>
-
-                        <span class="text-sm font-semibold text-gray-900">
-                            {{ dispatch.escalation_type }}
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between gap-4">
-
-                        <span class="text-sm text-gray-500">
-                            Created
-                        </span>
-
-                        <span class="text-sm font-medium text-gray-600 text-right">
-                            {{ dispatch.created_at }}
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between gap-4">
-
-                        <span class="text-sm text-gray-500">
-                            Updated
-                        </span>
-
-                        <span class="text-sm font-medium text-gray-600 text-right">
-                            {{ dispatch.updated_at }}
-                        </span>
-
-                    </div>
-
-                    {% if dispatch.closed_at %}
-
-                    <div class="flex justify-between gap-4">
-
-                        <span class="text-sm text-gray-500">
-                            Closed
-                        </span>
-
-                        <span class="text-sm font-medium text-gray-600 text-right">
-                            {{ dispatch.closed_at }}
-                        </span>
-
-                    </div>
-
-                    {% endif %}
-
-                </div>
-
-            </div>
-
-        </aside>
-
-    </div>
-
-    {% if image %}
-
-    <section class="mt-6 bg-white rounded-2xl
-                    border border-gray-100
-                    shadow-sm overflow-hidden">
-
-        <div class="px-6 py-5
-                    border-b border-gray-100
-                    flex flex-col sm:flex-row
-                    sm:items-center
-                    sm:justify-between gap-4">
-
-            <div>
-
-                <h3 class="font-bold text-gray-900">
-                    Dispatch Attachment
-                </h3>
-
-                <p class="text-xs text-gray-500 mt-1">
-                    Supporting dispatch documentation
-                </p>
-
-            </div>
-
-            {% if is_img_pdf %}
-
-            <a href="{{ image.image.url }}"
-               target="_blank"
-               class="inline-flex items-center
-                      justify-center gap-2
-                      bg-[#46BD61]
-                      hover:bg-[#35A850]
-                      text-white
-                      px-5 py-2.5
-                      rounded-lg
-                      text-sm font-semibold
-                      shadow-sm
-                      transition">
-
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="w-4 h-4"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
-                     stroke-width="2">
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4"/>
-
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M14 4h6m0 0v6m0-6L10 14"/>
-
-                </svg>
-
-                Open PDF
-
-            </a>
-
+                </section>
             {% endif %}
-
-        </div>
-
-        <div class="p-6">
-
-            {% if is_img_pdf %}
-
-            <div class="rounded-xl
-                        bg-[#F5F9F6]
-                        border border-green-50
-                        p-10 text-center">
-
-                <div class="mx-auto w-16 h-16 rounded-2xl
-                            bg-red-50
-                            flex items-center justify-center">
-
-                    <span class="text-red-500 font-bold text-sm">
-                        PDF
-                    </span>
-
+            <div class="py-8 text-center">
+                <div class="inline-flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[#46BD61]"></span>
+                    <span class="text-xs text-gray-400">Mashauri Dispatch Management</span>
                 </div>
-
-                <p class="mt-4 font-semibold text-gray-900">
-                    Dispatch PDF Attachment
-                </p>
-
-                <p class="text-sm text-gray-500 mt-1">
-                    Open the document to view the attachment.
-                </p>
-
+                <p class="text-xs text-gray-400 mt-1">Dispatch #{{ dispatch.id }}</p>
             </div>
-
-            {% else %}
-
-            <div class="flex justify-center">
-
-                <img src="{{ image.image.url }}"
-                     alt="Dispatch Image"
-                     class="max-w-full
-                            max-h-[600px]
-                            object-contain
-                            rounded-xl
-                            shadow-md">
-
-            </div>
-
-            {% endif %}
-
-        </div>
-
-    </section>
-
-    {% endif %}
-
-    <div class="py-8 text-center">
-
-        <div class="inline-flex items-center gap-2">
-
-            <span class="w-2 h-2 rounded-full bg-[#46BD61]"></span>
-
-            <span class="text-xs text-gray-400">
-                Mashauri Dispatch Management
-            </span>
-
-        </div>
-
-        <p class="text-xs text-gray-400 mt-1">
-            Dispatch #{{ dispatch.id }}
-        </p>
-
-    </div>
-
-</main>
-
-{% if can_move_next %}
-
-<div id="stageModal"
-     class="fixed inset-0 z-50 hidden">
-
-    <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm"
-         onclick="closeStageModal()"></div>
-
-    <div class="relative min-h-screen
-                flex items-center justify-center
-                p-4">
-
-        <div class="w-full max-w-lg
-                    bg-white
-                    rounded-2xl
-                    shadow-2xl
-                    border border-green-100
-                    overflow-hidden">
-
-            <div class="px-6 py-5
-                        border-b border-gray-100
-                        flex items-center justify-between">
-
-                <div>
-
-                    <p class="text-xs uppercase
-                              tracking-widest
-                              text-[#46BD61]
-                              font-bold">
-
-                        Stage Transition
-
-                    </p>
-
-                    <h3 class="text-xl font-bold text-gray-900 mt-1">
-                        Move Dispatch Forward
-                    </h3>
-
-                </div>
-
-                <button type="button"
-                        onclick="closeStageModal()"
-                        class="w-9 h-9 rounded-full
-                               bg-gray-100
-                               hover:bg-[#EAF8EE]
-                               text-gray-500
-                               hover:text-[#35A850]
-                               flex items-center justify-center
-                               transition">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         class="w-5 h-5"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="2">
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M6 18L18 6M6 6l12 12"/>
-
-                    </svg>
-
-                </button>
-
-            </div>
-
-            <form method="POST">
-
-                {% csrf_token %}
-
-                <input type="hidden"
-                       name="action"
-                       value="move_next">
-
-                <div class="p-6">
-
-                    <div class="rounded-xl
-                                bg-[#F5F9F6]
-                                border border-green-100
-                                p-4 mb-6">
-
-                        <div class="flex items-center justify-center gap-3">
-
-                            <span class="px-3 py-2
-                                         rounded-lg
-                                         bg-white
-                                         border border-gray-100
-                                         text-sm
-                                         font-bold
-                                         text-gray-800">
-
-                                {{ current_stage }}
-
-                            </span>
-
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="w-5 h-5 text-[#46BD61]"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor"
-                                 stroke-width="2.5">
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M5 12h14"/>
-
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M13 6l6 6-6 6"/>
-
-                            </svg>
-
-                            <span class="px-3 py-2
-                                         rounded-lg
-                                         bg-[#46BD61]
-                                         text-white
-                                         text-sm
-                                         font-bold">
-
-                                {{ next_stage }}
-
-                            </span>
-
+        </main>
+        {% if can_move_next %}
+            <div id="stageModal" class="fixed inset-0 z-50 hidden">
+                <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm"
+                     onclick="closeStageModal()"></div>
+                <div class="relative min-h-screen flex items-center justify-center p-4">
+                    <div class="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-green-100 overflow-hidden">
+                        <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs uppercase tracking-widest text-[#46BD61] font-bold">Stage Transition</p>
+                                <h3 class="text-xl font-bold text-gray-900 mt-1">Move Dispatch Forward</h3>
+                            </div>
+                            <button type="button"
+                                    onclick="closeStageModal()"
+                                    class="w-9 h-9 rounded-full bg-gray-100 hover:bg-[#EAF8EE] text-gray-500 hover:text-[#35A850] flex items-center justify-center transition">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="w-5 h-5"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
-
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="move_next">
+                            <div class="p-6">
+                                <div class="rounded-xl bg-[#F5F9F6] border border-green-100 p-4 mb-6">
+                                    <div class="flex items-center justify-center gap-3">
+                                        <span class="px-3 py-2 rounded-lg bg-white border border-gray-100 text-sm font-bold text-gray-800">
+                                            {{ current_stage }}
+                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5 text-[#46BD61]"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 6l6 6-6 6" />
+                                        </svg>
+                                        <span class="px-3 py-2 rounded-lg bg-[#46BD61] text-white text-sm font-bold">{{ next_stage }}</span>
+                                    </div>
+                                </div>
+                                <!-- Movement Comment -->
+                                <div>
+                                    <label for="stageComment" class="block text-sm font-bold text-gray-800 mb-2">
+                                        Movement Comment
+                                        <span class="text-red-500">*</span>
+                                    </label>
+                                    <p class="text-xs text-gray-500 mb-3">Please provide a comment explaining this stage transition.</p>
+                                    <textarea id="stageComment"
+                                            name="comment"
+                                            rows="5"
+                                            required
+                                            maxlength="2000"
+                                            placeholder="Enter your comment here..."
+                                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#46BD61] focus:border-[#46BD61] resize-none"></textarea>
+                                    <p class="text-xs text-gray-400 mt-2">This comment will be saved in the stage movement history.</p>
+                                </div>
+                                <!-- Optional Attachment -->
+                                <div class="mt-5">
+                                    <label class="block text-sm font-bold text-gray-800 mb-2">
+                                        Attachment
+                                        <span class="text-xs font-normal text-gray-400">(Optional)</span>
+                                    </label>
+                                    <label for="stage-history-file-upload"
+                                        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-700 font-semibold text-sm cursor-pointer hover:bg-gray-50 transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 h-5 text-[#46BD61]"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.586-6.586a4 4 0 00-5.656-5.656l-6.586 6.586a6 6 0 108.485 8.485L20 13" />
+                                        </svg>
+                                        Attach File
+                                        <input type="file"
+                                            id="stage-history-file-upload"
+                                            name="attachment"
+                                            class="hidden">
+                                    </label>
+                                    <p id="stage-history-file-name" class="text-xs text-gray-400 mt-2">You can optionally attach a file.</p>
+                                </div>
+                            </div>
+                            <!-- Footer -->
+                            <div class="px-6 py-5 border-t border-gray-100 bg-gray-50 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+                                <button type="button"
+                                        onclick="closeStageModal()"
+                                        class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-700 font-semibold text-sm hover:bg-gray-100 transition">
+                                    Cancel
+                                </button>
+                                <button type="submit"
+                                        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#46BD61] hover:bg-[#35A850] text-white font-bold text-sm shadow-sm hover:shadow-md transition">
+                                    Confirm & Move
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="w-5 h-5"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 6l6 6-6 6" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
                     </div>
-
-                    <div>
-
-                        <label for="stageComment"
-                               class="block text-sm
-                                      font-bold
-                                      text-gray-800
-                                      mb-2">
-
-                            Movement Comment
-                            <span class="text-red-500">*</span>
-
-                        </label>
-
-                        <p class="text-xs text-gray-500 mb-3">
-                            Please provide a comment explaining this stage transition.
-                        </p>
-
-                        <textarea id="stageComment"
-                                  name="comment"
-                                  rows="5"
-                                  required
-                                  maxlength="2000"
-                                  placeholder="Enter your comment here..."
-                                  class="w-full
-                                         rounded-xl
-                                         border border-gray-200
-                                         bg-gray-50
-                                         px-4 py-3
-                                         text-sm
-                                         text-gray-800
-                                         placeholder-gray-400
-                                         focus:outline-none
-                                         focus:ring-2
-                                         focus:ring-[#46BD61]
-                                         focus:border-[#46BD61]
-                                         resize-none"></textarea>
-
-                        <p class="text-xs text-gray-400 mt-2">
-                            This comment will be saved in the stage movement history.
-                        </p>
-
-                    </div>
-
                 </div>
-
-                <div class="px-6 py-5
-                            border-t border-gray-100
-                            bg-gray-50
-                            flex flex-col-reverse
-                            sm:flex-row
-                            sm:justify-end
-                            gap-3">
-
-                    <button type="button"
-                            onclick="closeStageModal()"
-                            class="w-full sm:w-auto
-                                   inline-flex items-center
-                                   justify-center
-                                   px-5 py-2.5
-                                   rounded-xl
-                                   border border-gray-200
-                                   bg-white
-                                   text-gray-700
-                                   font-semibold
-                                   text-sm
-                                   hover:bg-gray-100
-                                   transition">
-
-                        Cancel
-
-                    </button>
-
-                    <button type="submit"
-                            class="w-full sm:w-auto
-                                   inline-flex items-center
-                                   justify-center
-                                   gap-2
-                                   px-5 py-2.5
-                                   rounded-xl
-                                   bg-[#46BD61]
-                                   hover:bg-[#35A850]
-                                   text-white
-                                   font-bold
-                                   text-sm
-                                   shadow-sm
-                                   hover:shadow-md
-                                   transition">
-
-                        Confirm & Move
-
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             class="w-5 h-5"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke="currentColor"
-                             stroke-width="2.5">
-
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M5 12h14"/>
-
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M13 6l6 6-6 6"/>
-
-                        </svg>
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-</div>
-
-{% endif %}
-
-<script>
+            </div>
+        {% endif %}
+        <script>
     function openStageModal() {
         const modal = document.getElementById('stageModal');
 
@@ -2147,8 +1107,6 @@
             closeStageModal();
         }
     });
-</script>
-
-</body>
-
+        </script>
+    </body>
 </html>

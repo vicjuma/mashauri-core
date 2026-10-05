@@ -3,7 +3,17 @@
  {% block extra_styles %}
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
 <style>
-  
+  .container > header > nav {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.navbar-menu > ul.menu {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+}
     .custom-select {
         display: inline-block;
         background: #46BD61;
@@ -251,7 +261,7 @@
                           {% endif %}
                       </td>
                       <td>
-                        <a href="{% url 'dispatch_detail' dispatch.pk %}"
+                        <a href="{% url 'rp_dispatch_detail' dispatch.pk %}"
                           style="text-decoration: none; color: cyan">
                             Details
                         </a>
@@ -280,10 +290,10 @@
                         {% endif %}
                         <td><span class="status {{dispatch.status}}">{{ dispatch.status }}</span></td>
                        <td>
-                          <a href="{% url 'dispatch_detail' dispatch.pk %}"
-                            style="text-decoration: none; color: cyan">
-                              Details
-                          </a>
+                        <a href="{% url 'rp_dispatch_detail' dispatch.pk %}"
+                          style="text-decoration: none; color: cyan">
+                            Details
+                        </a>
                         </td>
                     </tr>
                     {% endif %}
