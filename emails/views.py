@@ -1,146 +1,277 @@
-from .models import RecipientEmail, RecipientCategory
-from mashauri.utils import send_mail
-from mashauri.models import Dispatch
-from datetime import timedelta
-from django.utils.timezone import now
+from django.contrib.auth.decorators import login_required
+from .optimization_otb_utils import build_context
+from django.shortcuts import render, redirect
+from mashauri.models import User
+from django.http import HttpResponseForbidden
 
-# Create your views here.
-def email_recipients_escalation_matrix(group_name):
-    return list(
-        RecipientEmail.objects.filter(
-            group__category=RecipientCategory.ESCALATION_MATRIX,
-            group__name=group_name,
-            group__is_active=True,
-            is_active=True,
-        ).values_list("email", flat=True)
-    )
-
-
-def send_sla_escalation_email(dispatch, sla_stage, recipients):
-    subject = (
-        f"SLA Escalation: {sla_stage} — "
-        f"{dispatch.building_name}"
-    )
-
-    message = (
-        f"Please note that the dispatch for "
-        f"\"{dispatch.client_name}\" located at "
-        f"\"{dispatch.building_name}\" has reached the "
-        f"{sla_stage} escalation stage.\n\n"
-        f"Dispatch ID: MSH-{str(dispatch.id).zfill(7)}\n"
-        f"Building ID: {dispatch.building_id}\n"
-        f"MSP: {dispatch.msp or 'N/A'}\n"
-        f"FDP: {dispatch.fdp or 'N/A'}\n"
-        f"Escalation Type: {dispatch.escalation_type}\n\n"
-        f"Please take the necessary action.\n\n"
-        f"Mashauri | Core."
-    )
-
-    send_mail(
-        recipients=recipients,
-        subject=subject,
-        message=message
-    )
-
-
-def send_project_manager_sla_emails():
-    recipients = (
-        email_recipients_escalation_matrix("Project Manager")
-        + email_recipients_escalation_matrix("Technical Project Manager")
-    )
-
-    dispatches = Dispatch.objects.filter(
-        is_expired=True,
-        pm_sla_email_sent=False,
-        expired_at__lte=now() - timedelta(hours=24),
-    )
-
-    for dispatch in dispatches:
-        send_sla_escalation_email(
-            dispatch,
-            "Project Manager / Technical Project Manager — 24 Hours",
-            recipients
+@login_required
+def redirect_to_optimization_dashboard(request):
+    if request.user.role == User.Role.ADMIN:
+        return redirect('admin_optimization_dashboard')
+    elif request.user.role == User.Role.MSP:
+        return redirect('msp_optimization_dashboard')
+    elif request.user.role == User.Role.FDP:
+        return redirect('fdp_optimization_dashboard')
+    elif request.user.role == User.Role.ENTERPRISE_CONNECTIVITY:
+        return redirect('ec_optimization_dashboard')
+    elif request.user.role == User.Role.ENTERPRISE_PROJECT:
+        return redirect('ep_optimization_dashboard')
+    elif request.user.role == User.Role.SUPPORT:
+        return redirect('support_optimization_dashboard')
+    elif request.user.role == User.Role.ROLLOUT_PARTNER:
+        return redirect('rp_optimization_dashboard')
+    else:
+        return HttpResponseForbidden(
+            "You don't have access to the Optimization dashboard."
         )
 
-        dispatch.pm_sla_email_sent = True
-        dispatch.save(update_fields=["pm_sla_email_sent"])
 
-
-def send_chief_operating_officer_sla_emails():
-    recipients = email_recipients_escalation_matrix("Chief Operating Officer")
-
-    dispatches = Dispatch.objects.filter(
-        is_expired=True,
-        coo_sla_email_sent=False,
-        expired_at__lte=now() - timedelta(hours=30),
-    )
-
-    for dispatch in dispatches:
-        send_sla_escalation_email(
-            dispatch,
-            "Chief Operating Officer — 30 Hours",
-            recipients
+@login_required
+def redirect_to_otb_dashboard(request):
+    if request.user.role == User.Role.ADMIN:
+        return redirect('admin_otb_dashboard')
+    elif request.user.role == User.Role.MSP:
+        return redirect('msp_otb_dashboard')
+    elif request.user.role == User.Role.FDP:
+        return redirect('fdp_otb_dashboard')
+    elif request.user.role == User.Role.ENTERPRISE_CONNECTIVITY:
+        return redirect('ec_otb_dashboard')
+    elif request.user.role == User.Role.ENTERPRISE_PROJECT:
+        return redirect('ep_otb_dashboard')
+    elif request.user.role == User.Role.SUPPORT:
+        return redirect('support_otb_dashboard')
+    elif request.user.role == User.Role.ROLLOUT_PARTNER:
+        return redirect('rp_otb_dashboard')
+    else:
+        return HttpResponseForbidden(
+            "You don't have access to the OTB dashboard."
         )
 
-        dispatch.coo_sla_email_sent = True
-        dispatch.save(update_fields=["coo_sla_email_sent"])
+################################ OPTIMIZATION ####################################
+@login_required
+def msp_optimization_dashboard(request):
+    user = request.user
 
-
-def send_chief_technical_officer_sla_emails():
-    recipients = email_recipients_escalation_matrix("Chief Technical Officer")
-
-    dispatches = Dispatch.objects.filter(
-        is_expired=True,
-        cto_sla_email_sent=False,
-        expired_at__lte=now() - timedelta(hours=40),
+    context = build_context(
+        user,
+        'msp',
+        user.msp_category,
+        request,
+        escalation_type='Optimization'
     )
 
-    for dispatch in dispatches:
-        send_sla_escalation_email(
-            dispatch,
-            "Chief Technical Officer — 40 Hours",
-            recipients
-        )
-
-        dispatch.cto_sla_email_sent = True
-        dispatch.save(update_fields=["cto_sla_email_sent"])
-
-
-def send_chief_executive_officer_sla_emails():
-    recipients = email_recipients_escalation_matrix("Chief Executive Officer")
-
-    dispatches = Dispatch.objects.filter(
-        is_expired=True,
-        ceo_sla_email_sent=False,
-        expired_at__lte=now() - timedelta(hours=48),
+    return render(
+        request,
+        'optimization/msp_optimization_dashboard.html',
+        context
     )
 
-    for dispatch in dispatches:
-        send_sla_escalation_email(
-            dispatch,
-            "Chief Executive Officer — 48 Hours",
-            recipients
-        )
 
-        dispatch.ceo_sla_email_sent = True
-        dispatch.save(update_fields=["ceo_sla_email_sent"])
+@login_required
+def fdp_optimization_dashboard(request):
+    user = request.user
 
-
-def send_chief_executive_officer_sla_emails():
-    recipients = email_recipients_escalation_matrix("Chief Executive Officer")
-
-    dispatches = Dispatch.objects.filter(
-        is_expired=True,
-        ceo_sla_email_sent=False,
-        expired_at__lte=now() - timedelta(hours=48),
+    context = build_context(
+        user,
+        'fdp',
+        user.fdp_category,
+        request,
+        escalation_type='Optimization'
     )
 
-    for dispatch in dispatches:
-        send_sla_escalation_email(
-            dispatch,
-            "Chief Executive Officer — 48 Hours",
-            recipients
-        )
+    return render(
+        request,
+        'optimization/fdp_optimization_dashboard.html',
+        context
+    )
 
-        dispatch.ceo_sla_email_sent = True
-        dispatch.save(update_fields=["ceo_sla_email_sent"])
+
+@login_required
+def rp_optimization_dashboard(request):
+    user = request.user
+
+    context = build_context(
+        user,
+        'rp',
+        user.rp_category,
+        request,
+        escalation_type='Optimization'
+    )
+
+    return render(
+        request,
+        'optimization/rp_optimization_dashboard.html',
+        context
+    )
+
+
+@login_required
+def ec_optimization_dashboard(request):
+    user = request.user
+
+    context = build_context(
+        user,
+        None,
+        None,
+        request,
+        escalation_type='Optimization'
+    )
+
+    return render(
+        request,
+        'optimization/ec_optimization_dashboard.html',
+        context
+    )
+
+
+@login_required
+def ep_optimization_dashboard(request):
+    user = request.user
+
+    context = build_context(
+        user,
+        None,
+        None,
+        request,
+        escalation_type='Optimization'
+    )
+
+    return render(
+        request,
+        'optimization/ep_optimization_dashboard.html',
+        context
+    )
+
+
+@login_required
+def support_optimization_dashboard(request):
+    user = request.user
+
+    context = build_context(
+        user,
+        None,
+        None,
+        request,
+        escalation_type='Optimization'
+    )
+
+    return render(
+        request,
+        'optimization/support_optimization_dashboard.html',
+        context
+    )
+
+
+################################ OTB ####################################
+@login_required
+def msp_otb_dashboard(request):
+    user = request.user
+
+    context = build_context(
+        user,
+        'msp',
+        user.msp_category,
+        request,
+        escalation_type='OTB'
+    )
+
+    return render(
+        request,
+        'otb/msp_otb_dashboard.html',
+        context
+    )
+
+
+@login_required
+def fdp_otb_dashboard(request):
+    user = request.user
+
+    context = build_context(
+        user,
+        'fdp',
+        user.fdp_category,
+        request,
+        escalation_type='OTB'
+    )
+
+    return render(
+        request,
+        'otb/fdp_otb_dashboard.html',
+        context
+    )
+
+
+@login_required
+def rp_otb_dashboard(request):
+    user = request.user
+
+    context = build_context(
+        user,
+        'rp',
+        user.rp_category,
+        request,
+        escalation_type='OTB'
+    )
+
+    return render(
+        request,
+        'otb/rp_otb_dashboard.html',
+        context
+    )
+
+
+@login_required
+def ec_otb_dashboard(request):
+    user = request.user
+
+    context = build_context(
+        user,
+        None,
+        None,
+        request,
+        escalation_type='OTB'
+    )
+
+    return render(
+        request,
+        'otb/ec_otb_dashboard.html',
+        context
+    )
+
+
+@login_required
+def ep_otb_dashboard(request):
+    user = request.user
+
+    context = build_context(
+        user,
+        None,
+        None,
+        request,
+        escalation_type='OTB'
+    )
+
+    return render(
+        request,
+        'otb/ep_otb_dashboard.html',
+        context
+    )
+
+
+@login_required
+def support_otb_dashboard(request):
+    user = request.user
+
+    context = build_context(
+        user,
+        None,
+        None,
+        request,
+        escalation_type='OTB'
+    )
+
+    return render(
+        request,
+        'otb/support_otb_dashboard.html',
+        context
+    )
