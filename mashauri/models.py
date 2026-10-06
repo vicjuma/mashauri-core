@@ -195,6 +195,7 @@ class Dispatch(models.Model):
         ('Design', 'Design'),
         ('Design approval', 'Design approval'),
         ('Commercial approval', 'Commercial approval'),
+        ('OSH', 'OSH'),
         ('Po issuance', 'Po issuance'),
         ('Materials', 'Materials'),
         ('Deployment', 'Deployment'),

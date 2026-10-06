@@ -464,12 +464,12 @@
                                                         class="w-full appearance-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 pr-10 text-sm font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#46BD61] focus:border-[#46BD61]">
                                                     <!-- MSP -->
                                                     <optgroup label="MSP">
-                                                        {% if dispatch.msp != None %}
-                                                            <option selected value="{{ dispatch.msp }}">{{ dispatch.msp }}</option>
+                                                        {% if dispatch.msp %}
+                                                            <option selected value="MSP:{{ dispatch.msp }}">{{ dispatch.msp }}</option>
                                                         {% endif %}
                                                         {% for value, label in msp_choices %}
                                                             {% if value != dispatch.msp %}
-                                                                <option value="{{ value }}">{{ label }}</option>
+                                                                <option value="MSP:{{ value }}">{{ label }}</option>
                                                             {% endif %}
                                                         {% endfor %}
                                                     </optgroup>
@@ -477,14 +477,15 @@
                                                     {% if request.user.role == "ENTERPRISE CONNECTIVITY" %}
                                                         <optgroup label="Rollout Partner">
                                                             {% for value, label in rp_choices %}
-                                                                <option value="{{ value }}" {% if value == dispatch.rp %}selected{% endif %}>{{ label }}</option>
+                                                                <option value="RP:{{ value }}"
+                                                                        {% if value == dispatch.rp %}selected{% endif %}>{{ label }}</option>
                                                             {% endfor %}
                                                         </optgroup>
                                                     {% endif %}
                                                     <!-- ESCALATE UPWARDS -->
                                                     <optgroup label="Escalate Upwards">
                                                         {% if dispatch.reassign_to != "ENTERPRISE CONNECTIVITY" %}
-                                                            <option value="ENTERPRISE CONNECTIVITY">ENTERPRISE CONNECTIVITY</option>
+                                                            <option value="EC:ENTERPRISE CONNECTIVITY">ENTERPRISE CONNECTIVITY</option>
                                                         {% endif %}
                                                     </optgroup>
                                                 </select>

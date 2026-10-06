@@ -6,6 +6,7 @@ import tempfile
 from io import BytesIO
 from django.conf import settings
 from functools import wraps
+from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from reportlab.lib.units import inch
@@ -718,42 +719,73 @@ def handle_dispatch_closing(request, dispatch, email_recipients, full_url):
     return render(request, 'mashauri/success_deletion.html', {})
 
 
-# Handler for reassigning dispatch
 def handle_dispatch_reassignment(
         request, dispatch, email_recipients, full_url):
-    selected_value = request.POST.get('assignment')
+
+    selected_assignment = request.POST.get('assignment')
     selected_escalation = request.POST.get('escalation_type')
 
-    msp_values = [value for value, label in Dispatch.MSP_CHOICES]
-    rp_values = [value for value, label in Dispatch.RP_CHOICES]
+    if not selected_assignment:
+        return HttpResponseBadRequest("No assignment selected.")
 
-    if selected_value in msp_values:
+    try:
+        assignment_type, selected_value = selected_assignment.split(':', 1)
+    except ValueError:
+        return HttpResponseBadRequest("Invalid assignment.")
+
+    if assignment_type == 'MSP':
+
         dispatch.msp = selected_value
         dispatch.rp = None
         dispatch.reassign_to = selected_value
-    elif selected_value in rp_values:
+
+    elif assignment_type == 'RP':
+
         dispatch.msp = None
         dispatch.rp = selected_value
         dispatch.reassign_to = selected_value
 
         if selected_escalation:
             dispatch.escalation_type = selected_escalation
+
         if selected_escalation == 'Optimization':
             dispatch.sla_timer = now() + timedelta(hours=720)
+
         elif selected_escalation == 'OTB':
             dispatch.sla_timer = now() + timedelta(hours=1512)
-    elif selected_value == 'ENTERPRISE CONNECTIVITY':
+
+    elif assignment_type == 'EC':
+
         dispatch.msp = None
         dispatch.rp = None
         dispatch.reassign_to = selected_value
         dispatch.sla_timer = now() + timedelta(days=10)
+
+    else:
+        return HttpResponseBadRequest(
+            "Invalid assignment type."
+        )
+
     dispatch.save()
 
     subject, message = prepare_email_details(
-        dispatch, None, full_url, "reassign")
-    send_mail(email_recipients, subject, message)
+        dispatch,
+        None,
+        full_url,
+        "reassign"
+    )
 
-    return render(request, 'mashauri/success_reassignment.html', {})
+    send_mail(
+        email_recipients,
+        subject,
+        message
+    )
+
+    return render(
+        request,
+        'mashauri/success_reassignment.html',
+        {}
+    )
 
 
 '''SENDING SCHEDULES EMAILS'''

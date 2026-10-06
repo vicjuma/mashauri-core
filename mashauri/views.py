@@ -255,6 +255,7 @@ def rp_dispatch_detail(request, pk):
         'Survey',
         'Design',
         'Design approval',
+        'OSH',
         'Commercial approval',
         'Po issuance',
         'Materials',
