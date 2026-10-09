@@ -273,9 +273,9 @@ class Dispatch(models.Model):
             if self.escalation_type == 'Proactive':
                 self.sla_timer = timezone.now() + timedelta(hours=120)
             elif self.escalation_type == 'OTB':
-                 self.sla_timer = timezone.now() + timedelta(hours=1512)
+                 self.sla_timer = timezone.now() + timedelta(hours=504)
             elif self.escalation_type == 'Optimization':
-                self.sla_timer = timezone.now() + timedelta(hours=720)
+                self.sla_timer = timezone.now() + timedelta(hours=240)
             elif (
                     (self.escalation_type == 'Reactive') or (
                             self.escalation_type == 'Interception')):
