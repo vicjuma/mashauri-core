@@ -3,11 +3,6 @@ from .utils import schedule_nine_am_emails, schedule_twelve_noon_emails, \
     schedule_four_pm_emails
 from .models import Dispatch
 from django.utils.timezone import now
-from emails.views import (
-    schedule_nine_am_emails,
-    schedule_twelve_noon_emails,
-    schedule_four_pm_emails,
-)
 from emails.utils import send_all_sla_matrix_emails
 
 
