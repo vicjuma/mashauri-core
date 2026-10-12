@@ -33,9 +33,9 @@ app.conf.beat_schedule = {
         'task': 'mashauri.tasks.update_expired_dispatches',
         'schedule': crontab(minute='*/5'),  # Schedule for 4 PM
     },
-     # SLA Escalation Matrix
-    'send-sla-matrix-emails': {
-        'task': 'mashauri.tasks.send_sla_matrix_emails',
+    # Daily dispatch age reminders at 8 AM
+    'send-dispatch-age-reminders': {
+        'task': 'mashauri.tasks.dispatch_test_age_reminders',
         'schedule': crontab(minute=0),
     },
 }
