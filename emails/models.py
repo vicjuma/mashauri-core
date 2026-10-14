@@ -95,12 +95,26 @@ class MSPEscalationEmail(models.Model):
     def __str__(self):
         return f"{self.matrix.msp} — {self.get_role_display()} — {self.email}"
 
-class HODEscalationEmail(models.Model):
-    email = models.EmailField()
+class SafaricomEscalationRole(models.TextChoices):
+    HOD = "HOD", "HOD"
+    TEAM_MANAGER = "Team Manager", "Team Manager"
+    SENIOR_MANAGER = "Senior Manager", "Senior Manager"
+
+
+class SafaricomEscalationEmail(models.Model):
+    role = models.CharField(
+        max_length=50,
+        choices=SafaricomEscalationRole.choices
+    )
+    escalation_days = models.PositiveIntegerField(
+        null=True,
+        blank=True
+    )
+    email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ("email",)
+        ordering = ["role", "email"]
 
     def __str__(self):
-        return self.email
+        return f"{self.role} — {self.email}"

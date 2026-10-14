@@ -2,7 +2,9 @@ from django.contrib.auth.decorators import login_required
 from .optimization_otb_utils import build_context
 from django.shortcuts import render, redirect
 from mashauri.models import User
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
+from .utils import send_mail
+from django.conf import settings
 
 @login_required
 def redirect_to_optimization_dashboard(request):
@@ -275,3 +277,18 @@ def support_otb_dashboard(request):
         'otb/support_otb_dashboard.html',
         context
     )
+
+def test_email(request):
+    sent = send_mail(
+        recipients=[
+            "vicjuma945@gmail.com",
+        ],
+        subject="TEST EMAIL",
+        message="This is just a test email",
+    )
+    print(sent)
+
+    if sent:
+        return HttpResponse("Test email sent successfully.")
+
+    return HttpResponse("Failed to send test email.", status=500)

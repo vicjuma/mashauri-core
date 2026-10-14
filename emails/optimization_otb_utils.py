@@ -63,15 +63,29 @@ def build_context(user, category_field, category_value, request, escalation_type
         calculate_time_fields(dispatch) for dispatch in all_dispatches]
 
     def get_closure_message(expired_at, closed_at):
-        if not expired_at or not closed_at:
-            return "Not enough data to determine closure time."
-        
-        duration = abs(closed_at - expired_at)
+        if not closed_at:
+            return "Closure timestamp not available."
+
+        closed_time = closed_at.strftime("%d %b %Y, %I:%M %p")
+
+        if not expired_at:
+            return f"Closed on {closed_time}. SLA expiry time is unavailable."
+
+        duration = closed_at - expired_at
+
+        if duration.total_seconds() < 0:
+            return f"Closed on {closed_time}, before SLA expiry."
+
         days = duration.days
         hours, remainder = divmod(duration.seconds, 3600)
         minutes = remainder // 60
 
-        return f"Closed after {days} days, {hours} hours, and {minutes} minutes expiration."
+        return (
+            f"Closed on {closed_time}. "
+            f"Closed {days} days, {hours} hours, "
+            f"and {minutes} minutes after SLA expiration."
+        )
+
     
     for dispatch in all_dispatches:
         dispatch.closure_message = get_closure_message(dispatch.expired_at, dispatch.closed_at)

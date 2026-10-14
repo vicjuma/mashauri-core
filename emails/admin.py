@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import RecipientGroup, RecipientEmail, MSPEscalationEmail, MSPEscalationMatrix, HODEscalationEmail
+from .models import RecipientGroup, RecipientEmail, MSPEscalationEmail, MSPEscalationMatrix, SafaricomEscalationEmail
 
 
 class RecipientEmailInline(admin.TabularInline):
@@ -29,8 +29,9 @@ class RecipientGroupAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     inlines = [RecipientEmailInline]
 
-@admin.register(HODEscalationEmail)
-class HODEscalationEmailAdmin(admin.ModelAdmin):
-    list_display = ("email", "is_active")
-    list_filter = ("is_active",)
+@admin.register(SafaricomEscalationEmail)
+class SafaricomEscalationEmailAdmin(admin.ModelAdmin):
+    list_display = ("role", "escalation_days", "email", "is_active")
+    list_filter = ("role", "is_active")
     search_fields = ("email",)
+    list_editable = ("escalation_days", "is_active")

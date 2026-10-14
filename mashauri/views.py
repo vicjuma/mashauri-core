@@ -171,16 +171,16 @@ def dispatch(request):
         email_recipients = determine_email_recipients(
             data['msp'], data['fdp'], data['rp'])
 
-        send_notification_email(
-            escalation_type=data['escalation_type'],
-            recipients=email_recipients,
-            building_name=data['building_name'],
-            client_name=data['client_name'],
-            msp=data['msp'],
-            rp=data['rp'],
-            full_url=escalation_url,
-            attachment_path=os.path.join(settings.MEDIA_ROOT, ticket.name)
-        )
+        # send_notification_email(
+        #     escalation_type=data['escalation_type'],
+        #     recipients=email_recipients,
+        #     building_name=data['building_name'],
+        #     client_name=data['client_name'],
+        #     msp=data['msp'],
+        #     rp=data['rp'],
+        #     full_url=escalation_url,
+        #     attachment_path=os.path.join(settings.MEDIA_ROOT, ticket.name)
+        # )
 
         return JsonResponse(
             {'status': 'success',

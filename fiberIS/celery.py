@@ -29,15 +29,50 @@ app.conf.beat_schedule = {
         'schedule': crontab(hour=16, minute=0),  # Schedule for 4 PM
     },
     # Update expired dispatches
-    'update-expired-dispatches': {
-        'task': 'mashauri.tasks.update_expired_dispatches',
-        'schedule': crontab(minute='*/5'),  # Schedule for 4 PM
+    # 'update-expired-dispatches': {
+    #     'task': 'mashauri.tasks.update_expired_dispatches',
+    #     'schedule': crontab(minute='*/5'),  # Schedule for 4 PM
+    # },
+    # Optimization reminders
+    # "optimization-dispatch-age-reminders": {
+    #     "task": "mashauri.tasks.dispatch_optimization_age_reminders",
+    #     "schedule": crontab(minute=0),
+    # },
+    # "optimization-dispatch-age-reminders-safaricom": {
+    #     "task": "mashauri.tasks.dispatch_optimization_age_reminders_safaricom",
+    #     "schedule": crontab(minute=0),
+    # },
+    # # OTB reminders
+    # "otb-dispatch-age-reminders": {
+    #     "task": "mashauri.tasks.dispatch_otb_age_reminders",
+    #     "schedule": crontab(minute=0),
+    # },
+    # "otb-dispatch-age-reminders-safaricom": {
+    #     "task": "mashauri.tasks.dispatch_otb_age_reminders_safaricom",
+    #     "schedule": crontab(minute=0),
+    # },
+    # Core Provisioning reminders
+    # "normal-dispatch-age-reminders": {
+    #     "task": "mashauri.tasks.dispatch_normal_age_reminders",
+    #     "schedule": crontab(minute=0),
+    # },
+    "normal-dispatch-age-reminders": {
+        "task": "mashauri.tasks.dispatch_normal_age_reminders",
+        "schedule": crontab(minute='*/5'),
     },
-    # Daily dispatch age reminders at 8 AM
-    'send-dispatch-age-reminders': {
-        'task': 'mashauri.tasks.dispatch_test_age_reminders',
-        'schedule': crontab(minute=0),
-    },
+    # "normal-dispatch-age-reminders-safaricom": {
+    #     "task": "mashauri.tasks.dispatch_normal_age_reminders_safaricom",
+    #     "schedule": crontab(minute=0),
+    # },
+    # # Test reminders
+    # "test-dispatch-age-reminders": {
+    #     "task": "mashauri.tasks.dispatch_test_age_reminders",
+    #     "schedule": crontab(minute=0),
+    # },
+    # "test-dispatch-age-reminders-safaricom": {
+    #     "task": "mashauri.tasks.dispatch_test_age_reminders_safaricom",
+    #     "schedule": crontab(minute=0),
+    # },
 }
 
 app.autodiscover_tasks()

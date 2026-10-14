@@ -247,23 +247,67 @@ class Dispatch(models.Model):
     choices=STAGE_CHOICES,
     default='Survey',
 )
+    # Normal internal team
     pm_sla_email_sent_normal = models.BooleanField(default=False)
     coo_sla_email_sent_normal = models.BooleanField(default=False)
     cto_sla_email_sent_normal = models.BooleanField(default=False)
     ceo_sla_email_sent_normal = models.BooleanField(default=False)
+    
+    # Normal safaricom team
+    team_manager_sla_email_sent_normal = models.BooleanField(default=False)
     hod_sla_email_sent_normal = models.BooleanField(default=False)
-
+    senior_manager_sla_email_sent_normal = models.BooleanField(default=False)
+    
+    # Optimization internal team
     pm_sla_email_sent_optimization = models.BooleanField(default=False)
     coo_sla_email_sent_optimization = models.BooleanField(default=False)
     cto_sla_email_sent_optimization = models.BooleanField(default=False)
     ceo_sla_email_sent_optimization = models.BooleanField(default=False)
+    
+    # Optimization safaricom team
+    team_manager_sla_email_sent_optimization = models.BooleanField(default=False)
+    senior_manager_sla_email_sent_optimization = models.BooleanField(default=False)
     hod_sla_email_sent_optimization = models.BooleanField(default=False)
 
+    # OTB internal team
     pm_sla_email_sent_otb = models.BooleanField(default=False)
     coo_sla_email_sent_otb = models.BooleanField(default=False)
     cto_sla_email_sent_otb = models.BooleanField(default=False)
     ceo_sla_email_sent_otb = models.BooleanField(default=False)
+    
+    # OTB safaricom team
+    team_manager_sla_email_sent_otb = models.BooleanField(default=False)
+    senior_manager_sla_email_sent_otb = models.BooleanField(default=False)
     hod_sla_email_sent_otb = models.BooleanField(default=False)
+    
+    # Test internal team
+    pm_sla_email_sent_test = models.BooleanField(default=False)
+    coo_sla_email_sent_test = models.BooleanField(default=False)
+    cto_sla_email_sent_test = models.BooleanField(default=False)
+    ceo_sla_email_sent_test = models.BooleanField(default=False)
+    hod_sla_email_sent_test = models.BooleanField(default=False)
+    
+    # Test safaricom team
+    team_manager_sla_email_sent_test = models.BooleanField(default=False)
+    senior_manager_sla_email_sent_test = models.BooleanField(default=False)
+    hod_sla_email_sent_test = models.BooleanField(default=False)
+    
+    # email cc fields
+    '''normal'''
+    hod_sla_email_sent_normal_cc = models.BooleanField(default=False)
+    senior_manager_sla_email_sent_normal_cc = models.BooleanField(default=False)
+    
+    '''optimization'''
+    senior_manager_sla_email_sent_optimization_cc = models.BooleanField(default=False)
+    hod_sla_email_sent_optimization_cc = models.BooleanField(default=False)
+    
+    '''otb'''
+    senior_manager_sla_email_sent_otb_cc = models.BooleanField(default=False)
+    hod_sla_email_sent_otb_cc = models.BooleanField(default=False)
+    
+    # test 1 hour
+    pm_sla_email_sent_normal_test = models.BooleanField(default=False)
+    
 
     def __str__(self):
         return f'{self.id} - {self.building_name}'

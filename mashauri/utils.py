@@ -124,15 +124,35 @@ def send_mail(recipients, subject, message, attachment_path=None):
             else:
                 pass
 
-    # Connect to the email server and send the message
-    with server_type(
-        settings.MAIL_HOST_SERVER,
-        settings.EMAIL_HOST_PORT,
-            context=ssl.create_default_context()) as server:
-        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
-        server.sendmail(settings.EMAIL_HOST_USER, recipients, msg.as_string())
+    
+    try:
+        with server_type(
+            settings.MAIL_HOST_SERVER,
+            settings.EMAIL_HOST_PORT,
+            context=ssl.create_default_context(),
+        ) as server:
+            server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
 
-    print(f"Email successfully sent to {recipients}")
+            print(recipients, "=================")
+
+            refused = server.sendmail(settings.EMAIL_HOST_USER, recipients, msg.as_string())
+
+            print("SMTP refused recipients:", refused)
+            print("Email submitted to SMTP for:", recipients)
+
+    except smtplib.SMTPRecipientsRefused as e:
+        print("All recipients were refused:", e.recipients)
+        return False
+
+    except smtplib.SMTPException as e:
+        print(f"SMTP error while sending email: {e}")
+        return False
+
+    except OSError as e:
+        print(f"Network or connection error while sending email: {e}")
+        return False
+
+    print(f"Email sending attempt completed for {recipients}")
 
 
 def generate_pdf(
@@ -189,13 +209,13 @@ def generate_pdf(
     logo_width = image_width * scale_factor
 
     # Header Image
-    logo_path = "https://assets.mouseinc.co.ke/mashauri.png"
-    logo = Image(logo_path, width=logo_width, height=logo_height)
+    # logo_path = "https://assets.datadynamo.co.ke/mashauri.png"
+    # logo = Image(logo_path, width=logo_width, height=logo_height)
 
     # Content
     elements = []
 
-    elements.append(logo)
+    # elements.append(logo)
     elements.append(Paragraph("Escalation/Dispatch Ticket", title_style))
     elements.append(Paragraph(f"MSH-{str(tid).zfill(7)}", header_style))
 
@@ -251,39 +271,58 @@ def generate_pdf(
 
 def calculate_time_fields(dispatch):
     """
-    Calculate time-related fields for a dispatch.
+    Calculate SLA time remaining and dispatch closure information.
     """
-    time_remaining = dispatch.sla_timer - now()
-    dispatch.time_remaining = time_remaining
+    current_time = now()
 
-    if dispatch.status == 'Closed':
-        time_since_closed = now() - dispatch.sla_timer
-        if time_since_closed > timedelta(0):
-            days = time_since_closed.days
-            hours = time_since_closed.seconds // 3600
-            minutes = (time_since_closed.seconds % 3600) // 60
-            dispatch.closed_time_display = (
-                f"Closed {days} days {hours} hours {minutes} minutes ago")
+    # Calculate time relative to the SLA deadline
+    if dispatch.sla_timer:
+        time_remaining = dispatch.sla_timer - current_time
+        dispatch.time_remaining = time_remaining
+
+        if time_remaining < timedelta(0):
+            time_after_expiration = abs(time_remaining)
+            days = time_after_expiration.days
+            hours = time_after_expiration.seconds // 3600
+            minutes = (time_after_expiration.seconds % 3600) // 60
+
+            dispatch.time_remaining_display = (
+                f"Expired {days} days {hours} hours " f"{minutes} minutes ago"
+            )
         else:
-            dispatch.closed_time_display = "Closed just now"
+            days = time_remaining.days
+            hours = time_remaining.seconds // 3600
+            minutes = (time_remaining.seconds % 3600) // 60
+
+            dispatch.time_remaining_display = (
+                f"{days} days {hours} hours {minutes} minutes"
+            )
+    else:
+        dispatch.time_remaining = None
+        dispatch.time_remaining_display = "SLA timer unavailable"
+
+    # Calculate time since the dispatch was actually closed
+    if dispatch.status == "Closed":
+        if dispatch.closed_at:
+            time_since_closed = current_time - dispatch.closed_at
+
+            if time_since_closed >= timedelta(0):
+                days = time_since_closed.days
+                hours = time_since_closed.seconds // 3600
+                minutes = (time_since_closed.seconds % 3600) // 60
+
+                dispatch.closed_time_display = (
+                    f"Closed {days} days {hours} hours " f"{minutes} minutes ago"
+                )
+            else:
+                dispatch.closed_time_display = "Closure time is in the future"
+        else:
+            dispatch.closed_time_display = "Closure timestamp unavailable"
     else:
         dispatch.closed_time_display = None
 
-    if time_remaining < timedelta(0):
-        time_after_expiration = abs(time_remaining)
-        days = time_after_expiration.days
-        hours = time_after_expiration.seconds // 3600
-        minutes = (time_after_expiration.seconds % 3600) // 60
-        dispatch.time_remaining_display = (
-            f"Expired {days} days {hours} hours {minutes} minutes ago")
-    else:
-        days = time_remaining.days
-        hours = time_remaining.seconds // 3600
-        minutes = (time_remaining.seconds % 3600) // 60
-        dispatch.time_remaining_display = (
-            f"{days} days {hours} hours {minutes} minutes")
-
     return dispatch
+
 
 
 def calculate_status_counts(dispatches):
@@ -359,15 +398,29 @@ def build_context(user, category_field, category_value, request):
         calculate_time_fields(dispatch) for dispatch in all_dispatches]
 
     def get_closure_message(expired_at, closed_at):
-        if not expired_at or not closed_at:
-            return "Not enough data to determine closure time."
-        
-        duration = abs(closed_at - expired_at)
+        if not closed_at:
+            return "Closure timestamp not available."
+
+        closed_time = closed_at.strftime("%d %b %Y, %I:%M %p")
+
+        if not expired_at:
+            return f"Closed on {closed_time}. SLA expiry time is unavailable."
+
+        duration = closed_at - expired_at
+
+        if duration.total_seconds() < 0:
+            return f"Closed on {closed_time}, before SLA expiry."
+
         days = duration.days
         hours, remainder = divmod(duration.seconds, 3600)
         minutes = remainder // 60
 
-        return f"Closed after {days} days, {hours} hours, and {minutes} minutes expiration."
+        return (
+            f"Closed on {closed_time}. "
+            f"Closed {days} days, {hours} hours, "
+            f"and {minutes} minutes after SLA expiration."
+        )
+
     
     for dispatch in all_dispatches:
         dispatch.closure_message = get_closure_message(dispatch.expired_at, dispatch.closed_at)
@@ -876,14 +929,26 @@ def generate_pdf_mailed(dispatches, filename, title):
 
 
 def save_contentfile_to_disk(contentfile, filename):
-    temp_file = tempfile.NamedTemporaryFile(
-        delete=False, suffix=".pdf", mode='wb')
-    with open(temp_file.name, 'wb') as f:
-        f.write(contentfile.read())
-    final_filename = f"{filename}.pdf"
-    temp_file.close()
-    os.rename(temp_file.name, final_filename)
+    final_filename = os.path.abspath(f"{filename}.pdf")
+
+    with tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".pdf",
+        mode="wb",
+        dir=os.path.dirname(final_filename),
+    ) as temp_file:
+        temp_file.write(contentfile.read())
+        temp_path = temp_file.name
+
+    try:
+        os.replace(temp_path, final_filename)
+    except Exception:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        raise
+
     return final_filename
+
 
 
 def send_escalation_email(start_time, end_time, subject, recipients):

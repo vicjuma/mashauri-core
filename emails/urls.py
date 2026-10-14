@@ -79,5 +79,8 @@ urlpatterns = [
         views.redirect_to_otb_dashboard,
         name='redirect_to_otb_dashboard'
     ),
+     path(
+         'email/test', views.test_email,
+         name='email_test'),
 
 ]
