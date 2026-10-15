@@ -106,16 +106,18 @@ def send_otb_dispatch_age_reminder(
             f"Unsupported recipient category: " f"{recipient_group.category}"
         )
 
-    target_date = current_date - timedelta(days=reminder_day)
+    
+    next_time = current_time - timedelta(days=reminder_day)
+    target_time = next_time - timedelta(days=1)
 
     dispatches = Dispatch.objects.filter(
-        created_at__date=target_date,
+        created_at__gte=target_time,
+        created_at__lt=next_time,
         status="Progress",
-        is_expired=False,
-        sla_timer__gt=current_time,
         escalation_type="OTB",
         **{category_field: recipient_group.name},
     ).filter(**{reminder_field: False})
+
 
     if not dispatches.exists():
         print(
@@ -193,25 +195,17 @@ def send_otb_dispatch_age_reminder_safaricom(
     if not reminder_field:
         raise ValueError("Safaricom OTB reminder day must be 15, 18, or 21.")
 
-    target_date = current_date - timedelta(days=reminder_day)
-
-    dispatch_filters = {
-        "created_at__date": target_date,
-        "status": "Progress",
-        "is_expired": False,
-        "escalation_type": "OTB",
-    }
-
-    # Team Manager and Senior Manager: SLA still active.
-    # HOD: SLA breached.
-    if reminder_day == 21:
-        dispatch_filters["sla_timer__lte"] = current_time
-    else:
-        dispatch_filters["sla_timer__gt"] = current_time
+    
+    next_time = current_time - timedelta(days=reminder_day)
+    target_time = next_time - timedelta(days=1)
 
     dispatches = Dispatch.objects.filter(
-        **dispatch_filters,
+        created_at__gte=target_time,
+        created_at__lt=next_time,
+        status="Progress",
+        escalation_type="OTB",
     ).filter(**{reminder_field: False})
+
 
     if not dispatches.exists():
         print(

@@ -108,14 +108,15 @@ def send_optimization_dispatch_age_reminder(
             f"Unsupported recipient category: " f"{recipient_group.category}"
         )
 
-    # Select dispatches created on the target calendar date.
-    target_date = current_date - timedelta(days=reminder_day)
+    # Select dispatches aged between the reminder day
+    # and the following day.
+    next_time = current_time - timedelta(days=reminder_day)
+    target_time = next_time - timedelta(days=1)
 
     dispatches = Dispatch.objects.filter(
-        created_at__date=target_date,
+        created_at__gte=target_time,
+        created_at__lt=next_time,
         status="Progress",
-        is_expired=False,
-        sla_timer__gt=current_time,
         escalation_type="Optimization",
         **{category_field: recipient_group.name},
     ).filter(**{reminder_field: False})
@@ -198,25 +199,17 @@ def send_optimization_dispatch_age_reminder_safaricom(
     if not reminder_field:
         raise ValueError("Safaricom reminder day must be 8, 9, or 10.")
 
-    target_date = current_date - timedelta(days=reminder_day)
-
-    dispatch_filters = {
-        "created_at__date": target_date,
-        "status": "Progress",
-        "is_expired": False,
-        "escalation_type": "Optimization",
-    }
-
-    # Days 8 and 9: SLA is still running.
-    # Day 10: SLA has been breached.
-    if reminder_day == 10:
-        dispatch_filters["sla_timer__lte"] = current_time
-    else:
-        dispatch_filters["sla_timer__gt"] = current_time
+    
+    next_time = current_time - timedelta(days=reminder_day)
+    target_time = next_time - timedelta(days=1)
 
     dispatches = Dispatch.objects.filter(
-        **dispatch_filters,
+        created_at__gte=target_time,
+        created_at__lt=next_time,
+        status="Progress",
+        escalation_type="Optimization",
     ).filter(**{reminder_field: False})
+
 
     if not dispatches.exists():
         print(

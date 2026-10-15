@@ -109,16 +109,14 @@ def send_normal_dispatch_age_reminder(
             f"Unsupported recipient category: " f"{recipient_group.category}"
         )
 
-    # Select dispatches within the target one-hour age window.
-    target_time = current_time - timedelta(hours=reminder_hours)
-    next_time = target_time + timedelta(hours=1)
+    # Select dispatches within the intended one-hour age window.
+    next_time = current_time - timedelta(hours=reminder_hours)
+    target_time = next_time - timedelta(hours=1)
 
     dispatches = Dispatch.objects.filter(
         created_at__gte=target_time,
         created_at__lt=next_time,
         status="Progress",
-        is_expired=False,
-        sla_timer__gt=current_time,
         escalation_type__in=[
             "Proactive",
             "Reactive",
@@ -206,14 +204,13 @@ def send_normal_dispatch_age_reminder_safaricom(
         raise ValueError("Safaricom reminder hours must be 30, 36, or 40.")
 
     # Find dispatches within the target one-hour age window.
-    target_time = current_time - timedelta(hours=reminder_hours)
-    next_time = target_time + timedelta(hours=1)
+    next_time = current_time - timedelta(hours=reminder_hours)
+    target_time = next_time - timedelta(hours=1)
 
     dispatch_filters = {
         "created_at__gte": target_time,
         "created_at__lt": next_time,
         "status": "Progress",
-        "is_expired": False,
         "escalation_type__in": [
             "Proactive",
             "Reactive",
@@ -221,13 +218,6 @@ def send_normal_dispatch_age_reminder_safaricom(
             "Support",
         ],
     }
-
-    # Team Manager: before SLA breach.
-    # HOD and Senior Manager: after the 36-hour SLA deadline.
-    if reminder_hours == 30:
-        dispatch_filters["sla_timer__gt"] = current_time
-    else:
-        dispatch_filters["sla_timer__lte"] = current_time
 
     dispatches = Dispatch.objects.filter(
         **dispatch_filters,
