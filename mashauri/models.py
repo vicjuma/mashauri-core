@@ -305,9 +305,6 @@ class Dispatch(models.Model):
     senior_manager_sla_email_sent_otb_cc = models.BooleanField(default=False)
     hod_sla_email_sent_otb_cc = models.BooleanField(default=False)
     
-    # test 1 hour
-    pm_sla_email_sent_normal_test = models.BooleanField(default=False)
-    
 
     def __str__(self):
         return f'{self.id} - {self.building_name}'

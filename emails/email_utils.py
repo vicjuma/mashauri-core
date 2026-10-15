@@ -133,7 +133,7 @@ def schedule_normal_dispatch_age_reminders():
         emails__is_active=True,
     ).distinct()
 
-    for reminder_hours in (1, 15, 20, 25, 30, 36, 40):
+    for reminder_hours in (15, 20, 25, 30, 36, 40):
         for recipient_group in recipient_groups:
             send_normal_dispatch_age_reminder(
                 reminder_hours=reminder_hours,

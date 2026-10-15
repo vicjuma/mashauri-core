@@ -168,3 +168,4 @@ cython_debug/
 
 
 dispatch_report_*.pdf
+*_dispatch_report*.pdf

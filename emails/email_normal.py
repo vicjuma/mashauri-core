@@ -14,7 +14,6 @@ def send_normal_dispatch_age_reminder(
     current_date = localtime(current_time).date()
 
     reminder_fields = {
-        1: "pm_sla_email_sent_normal_test",
         15: "pm_sla_email_sent_normal",
         20: "coo_sla_email_sent_normal",
         25: "cto_sla_email_sent_normal",
